@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="VestPlastDatabase" Class="BaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Server=DESKTOP-UMF5E2J\\SQLEXPRESS;Database=VestPlastDatabase;MultipleActiveResultSets=true;User ID=VPApplication;Password=AreleaApp#ConnPass" SettingsObjectName="AppNov14.SqlDataAccess.Properties.DataBaseSettings" SettingsPropertyName="DesktopConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Убрано" SettingsObjectName="AppNov14.SqlDataAccess.Properties.DataBaseSettings" SettingsPropertyName="DesktopConnectionString" Provider="System.Data.SqlClient" />
 	<Table Name="dbo.Warehouse" Member="Warehouse">
 		<Type Name="Warehouse">
 			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
