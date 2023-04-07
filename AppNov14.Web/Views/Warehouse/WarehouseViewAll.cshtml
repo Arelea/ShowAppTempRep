@@ -1,0 +1,98 @@
+﻿@model AppNov14.Web.ViewModels.Warehouse.WarehouseViewAllViewModel
+
+<div class="warehouse__search">
+    <form asp-action="WarehouseViewAll">
+        <div class="form-group">
+            <label asp-for="@this.Model.Type" class="control-label">Тип материала</label>
+            <select asp-for="@this.Model.Type" class="form-control type-select dropdown-for-select2" asp-items="@(new SelectList(this.Model.DistinctSelectTypes, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Type" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+<div class="table-wrapper">
+    @{
+        var count = 0;
+    }
+    @foreach (var type in this.Model.DistinctTypes)
+    {
+        <div class="warehouse__cell-container">
+            <div data-type-id="@count" data-type-text="@type" class="warehouse__cell-text">
+                <span>@type</span>
+            </div>
+            <div class="warehouse__cell-table">
+                <table align="center" class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Id
+                            </th>
+                            <th>
+                                Тип материала
+                            </th>
+                            <th>
+                                Наименование типа материала
+                            </th>
+                            <th>
+                                Поставщик
+                            </th>
+                            <th>
+                                Производитель
+                            </th>
+                            <th>
+                                Остатки
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in this.Model.Items.Where(m => m.Type == type))
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-action="ToIndexInformationList" asp-controller="Manufacturing" asp-route-type="@item.Type" asp-route-subType="@item.SubType" asp-route-provider="@item.Provider" asp-route-manufacturer="@item.Manufacturer" target="_blank">@item.Id</a>
+                                </td>
+                                <td>
+                                    @item.Type
+                                </td>
+                                <td>
+                                    @item.SubType
+                                </td>
+                                <td>
+                                    @item.Provider
+                                </td>
+                                <td>
+                                    @item.Manufacturer
+                                </td>
+                                <td class="@(item.Leftovers == 0 ? "edit-list-tr-writeoff" : string.Empty)">
+                                    @item.Leftovers
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        count++;
+    }
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(function () {
+        $('.type-select').change(function () {
+            let id = 0;
+            let text = $(this).val();
+            $('.warehouse__cell-text').each(function (index, elem) {
+                let $elem = $(elem);
+                let elemText = $elem.attr("data-type-text");
+                if (elemText === text) {
+                    id = $elem.attr("data-type-id");
+                }
+            });
+
+            $([document.documentElement, document.body]).animate({
+                scrollTop: $('[data-type-id=' + id + ']').offset().top
+            }, 1500);
+        });
+    });
+</script>

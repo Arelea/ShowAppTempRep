@@ -1,0 +1,264 @@
+﻿@model AppNov14.Web.ViewModels.Warehouse.WarehouseFullInfoViewModel
+
+@{
+    var items = this.Model.Items;
+    Layout = "_TableLayout";
+}
+<div class="table-inputs">
+    <form asp-action="WarehouseFullInfo" autocomplete="on">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-row">
+            <div class="form-group col-md-3 checkbox-helper">
+                <label asp-for="@this.Model.Form.ShowEmpty" class="control-label">Показать с нулевыми остатками</label>
+                <input asp-for="@this.Model.Form.ShowEmpty" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="@this.Model.Form.ExpiredMode" class="control-label">Параметры срока годности</label>
+                <select asp-for="@this.Model.Form.ExpiredMode" class="form-control" asp-items="@(new SelectList(this.Model.ExpiredModeList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.ExpiredMode" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-1">
+                <label asp-for="@this.Model.Form.DateStart" class="control-label">От</label>
+                <input asp-for="@this.Model.Form.DateStart" type="date" min="2010-01-01" max="2050-12-31" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.DateStart" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-1">
+                <label asp-for="@this.Model.Form.DateFinish" class="control-label">До</label>
+                <input asp-for="@this.Model.Form.DateFinish" type="date" min="2010-01-01" max="2050-12-31" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.DateFinish" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="@this.Model.Form.Type" class="control-label">Тип материала</label>
+                <select asp-for="@this.Model.Form.Type" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.TypeOfMaterialList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.Type" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="@this.Model.Form.SubType" class="control-label">Наименование типа материала</label>
+                <select asp-for="@this.Model.Form.SubType" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.NameOfTypeMaterialList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.SubType" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="@this.Model.Form.Provider" class="control-label">Поставщик</label>
+                <select asp-for="@this.Model.Form.Provider" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.ProviderList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.Provider" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="@this.Model.Form.Manufacturer" class="control-label">Производитель</label>
+                <select asp-for="@this.Model.Form.Manufacturer" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.ManufacturerList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.Manufacturer" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="@this.Model.Form.IndexName" class="control-label">Паспорт</label>
+                <input asp-for="@this.Model.Form.IndexName" class="form-control">
+                <span asp-validation-for="@this.Model.Form.IndexName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row input-btn-group">
+            <div class="form-group submit-btn">
+                <input type="submit" value="Найти" class="btn btn-primary-submit">
+            </div>
+            <div class="form-group child-btn">
+                <button class="btn btn-primary-warn btn-clear-filters">
+                    <span>Очистить фильтры</span>
+                </button>
+            </div>
+            <div class="form-group child-btn">
+                <a class="btn btn-secondary-child" asp-action="DownloadExcel" asp-controller="Warehouse">
+                    <span class="btn-link-text">Скачать Excel</span>
+                    <i class="icon-s20download1"></i>
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="table-wrapper">
+    @if (items == null || !items.Any())
+    {
+        <div class="empty-result">
+            <span>Записи не найдены</span>
+        </div>
+    }
+    else
+    {
+        <table class="table table-standart">
+            <thead>
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Тип материала
+                    </th>
+                    <th>
+                        Наименование типа материала
+                    </th>
+                    <th>
+                        Поставщик
+                    </th>
+                    <th>
+                        Производитель
+                    </th>
+                    <th>
+                        Id паспорта
+                    </th>
+                    <th>
+                        Паспорт
+                    </th>
+                    <th>
+                        Остатки
+                    </th>
+                    <th>
+                        Дата изготовления
+                    </th>
+                    <th>
+                        Срок годности
+                    </th>
+                    <th>
+                        Автоматическая дата
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in items)
+                {
+                    <tr>
+                        <td>
+                            @item.WarehouseId
+                        </td>
+                        <td>
+                            @item.Type
+                        </td>
+                        <td>
+                            @item.SubType
+                        </td>
+                        <td>
+                            @item.Provider
+                        </td>
+                        <td>
+                            @item.Manufacturer
+                        </td>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            <a asp-action="IndexInfo" asp-controller="Manufacturing" asp-route-indexId="@item.Id">@item.Index</a>
+                        </td>
+                        <td class="@(item.Leftovers == 0 ? "edit-list-tr-writeoff" : string.Empty)">
+                            @item.Leftovers
+                        </td>
+                        <td>
+                            @(item.ManufacturingDate.HasValue ? item.ManufacturingDate.Value.ToString("dd.MM.yyyy") : "")
+                        </td>
+                        <td>
+                            @(item.ExpirationDate.HasValue ? item.ExpirationDate.Value.ToString("dd.MM.yyyy") : "")
+                        </td>
+                        <td>
+                            @item.AutoDate
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<script>
+    $("#Form_Type").change(function() {
+        if ($(this).val() == "@null") {
+            $("#Form_SubType").empty();
+            $("#Form_Manufacturer").empty();
+            $("#Form_Provider").empty();
+        } else {
+            $.ajax({
+                url: "/Manufacturing/GetSubTypeByTypeJson",
+                type: 'POST',
+                cache: false,
+                data: { type: $('#Form_Type').val(), mode: 1 },
+                dataType: 'json',
+                success: function(data) {
+                    $("#Form_SubType").empty();
+                    $("#Form_Manufacturer").empty();
+                    $("#Form_Provider").empty();
+                    $("#Form_SubType").append($('<option/>', { value: '@null', text: '' }));
+                    $.each(data,
+                        function(index, value) {
+                            $("#Form_SubType").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                }
+            });
+        }
+    });
+
+    $("#Form_SubType").change(function() {
+        if ($(this).val() == "@null") {
+            $("#Form_Manufacturer").empty();
+            $("#Form_Provider").empty();
+        } else {
+            $.ajax({
+                url: "/Manufacturing/GetProviderByTypeAndSubTypeJson",
+                type: 'POST',
+                cache: false,
+                data: { type: $('#Form_Type').val(), subType: $('#Form_SubType').val(), mode: 1 },
+                dataType: 'json',
+                success: function(data) {
+                    $("#Form_Provider").empty();
+                    $("#Form_Manufacturer").empty();
+                    $("#Form_Provider").append($('<option/>', { value: '@null', text: '' }));
+                    $.each(data,
+                        function(index, value) {
+                            $("#Form_Provider").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                }
+            });
+        }
+    });
+
+    $("#Form_Provider").change(function() {
+        if ($(this).val() == "@null") {
+            $("#Form_Manufacturer").empty();
+        } else {
+            $.ajax({
+                url: "/Manufacturing/GetManufacturerByTypeAndSubTypeAndProviderJson",
+                type: 'POST',
+                cache: false,
+                data: { type: $("#Form_Type").val(), subType: $("#Form_SubType").val(), provider: $("#Form_Provider").val(), mode: 1 },
+                dataType: 'json',
+                success: function(data) {
+                    $("#Form_Manufacturer").empty();
+                    $("#Form_Manufacturer").append($('<option/>', { value: '@null', text: '' }));
+                    $.each(data,
+                        function(index, value) {
+                            $("#Form_Manufacturer").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                }
+            });
+        }
+    });
+
+    $('#Form_ByWarehouse').change(function() {
+        let $this = $(this);
+        if ($this.is(":checked")) {
+            $('.by-warehouse').removeClass("d-none");
+            $('.by-name').addClass("d-none");
+        } else {
+            $('.by-warehouse').addClass("d-none");
+            $('.by-name').removeClass("d-none");
+        }
+    });
+
+    $('.btn-clear-filters').click(function () {
+        $('form').find('select, input').val("@null");
+        $('form').submit();
+    });
+</script>

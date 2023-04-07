@@ -1,0 +1,14 @@
+﻿@model AppNov14.Web.ViewModels.Error.ErrorViewModel
+
+<h4>Возникла ошибка в орбработке вашего запроса</h4>
+
+<div class="alert alert-danger">
+    <h5>Сообщение ошибки</h5>
+    <hr />
+    <p>@this.Model.ExceptionMessage</p>
+</div>
+<div class="alert alert-danger">
+    <h5>Путь ошибки</h5>
+    <hr />
+    <p>@this.Model.ExceptionPath</p>
+</div>

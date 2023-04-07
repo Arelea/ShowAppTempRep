@@ -1,0 +1,106 @@
+﻿@using AppNov14.Helpers
+@model AppNov14.Web.ViewModels.Goods.MoveCompletedBatchViewModel
+
+<div class="form-display-container">
+    <div class="child-form-display__item row">
+        <div class="form-display__item-name col-3 col-md-3">
+            <span>#Id</span>
+        </div>
+        <div class="form-display__item-value col-6 col-md-6">
+            <span>@this.Model.Item.Id</span>
+        </div>
+    </div>
+    <div class="child-form-display__item row">
+        <div class="form-display__item-name col-3 col-md-3">
+            <span>Название</span>
+        </div>
+        <div class="form-display__item-value col-6 col-md-6">
+            <span><a asp-action="BatchFullInfo" asp-controller="Goods" asp-route-id="@this.Model.Item.Id" target="_blank">@this.Model.Item.Name</a></span>
+        </div>
+    </div>
+    <div class="child-form-display__item row">
+        <div class="form-display__item-name col-3 col-md-3">
+            <span>Статус</span>
+        </div>
+        <div class="form-display__item-value col-6 col-md-6">
+            <span>@BatchStatuses.GetName(this.Model.Item.StatusId)</span>
+        </div>
+    </div>
+    <div class="child-form-display__item row">
+        <div class="form-display__item-name col-3 col-md-3">
+            <span>Тип</span>
+        </div>
+        <div class="form-display__item-value col-6 col-md-6">
+            <span>@this.Model.Item.Type</span>
+        </div>
+    </div>
+    <div class="child-form-display__item row">
+        <div class="form-display__item-name col-3 col-md-3">
+            <span>Линия</span>
+        </div>
+        <div class="form-display__item-value col-6 col-md-6">
+            <span>@this.Model.Item.Line</span>
+        </div>
+    </div>
+    <div class="child-form-display__item row">
+        <div class="form-display__item-name col-3 col-md-3">
+            <span>Автоматическая дата</span>
+        </div>
+        <div class="form-display__item-value col-6 col-md-6">
+            <span>@this.Model.Item.InsertDate</span>
+        </div>
+    </div>
+    @if (this.Model.Item.CreateDate.HasValue)
+    {
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Дата создания партии</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Item.CreateDate.Value.ToString("dd.MM.yyyy")</span>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="base-divider"></div>
+
+<form asp-action="MoveCompletedBatch" autocomplete="on">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@this.Model.Form.Id" />
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="@this.Model.Form.InitialQuantity" class="control-label">Вес (кг.)</label>
+            <input asp-for="@this.Model.Form.InitialQuantity" class="form-control" autocomplete="off" />
+            <span asp-validation-for="@this.Model.Form.InitialQuantity" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="@this.Model.Form.InitialPackage" class="control-label">Количество баулов</label>
+            <input asp-for="@this.Model.Form.InitialPackage" class="form-control" autocomplete="off" />
+            <span asp-validation-for="@this.Model.Form.InitialPackage" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label asp-for="@this.Model.Form.CompletionDate" class="control-label">Дата завершения производства</label>
+            <input asp-for="@this.Model.Form.CompletionDate" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" min="2012-01-01" max="2050-12-31" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.CompletionDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Remark" class="control-label">Примечание</label>
+            <textarea asp-for="@this.Model.Form.Remark" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="@this.Model.Form.Remark" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row input-btn-group">
+        <div class="form-group submit-btn">
+            <input type="submit" value="Сохранить" class="btn btn-primary-submit" onclick="return confirm('Вы уверенны, что хотите внести партию на склад?')">
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

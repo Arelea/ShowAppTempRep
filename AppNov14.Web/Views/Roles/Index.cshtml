@@ -1,0 +1,23 @@
+﻿@model AppNov14.Web.ViewModels.Roles.RoleIndexViewModel
+
+<h2>Список ролей</h2>
+<table class="table">
+    @foreach (var role in this.Model.Roles)
+    {
+        <tr>
+            @if (role.Name != "Admin")
+            {
+                <td>@role.Name</td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@role.Id" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            }
+        </tr>
+    }
+</table>
+<a class="btn btn-outline-secondary" asp-action="Create">Добавить роль</a>
+<a class="btn btn-outline-secondary" asp-action="UserList">Список пользователей</a>

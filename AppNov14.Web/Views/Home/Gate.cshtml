@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Gate";
+    Layout = null;
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <a asp-controller="Home" asp-action="Index">Продолжить</a> 
+}
+else
+{
+    <a class="btn btn-sm btn-primary" asp-controller="Account" asp-action="Login">Войти</a>
+}
+
+<body background="images/grass.jpg"></body>

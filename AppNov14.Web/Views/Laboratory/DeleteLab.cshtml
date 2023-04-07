@@ -1,0 +1,89 @@
+﻿@model AppNov14.Web.ViewModels.Laboratory.DeleteTableRowLabViewModel
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.Type)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.SubType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.SubType)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.Quantity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.Quantity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.Provider)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.Provider)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.Document)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.Document)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.DocumentNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.DocumentNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.Indexation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.Indexation)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.DocDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.DocDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.Employee)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.Employee)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.IpAddress)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.IpAddress)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.AutoDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.AutoDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Form.Remarks)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Form.Remarks)
+        </dd>
+    </dl>
+
+    <form asp-action="DeleteLab">
+        <input type="hidden" asp-for="@this.Model.Form.Id" />
+        <input type="submit" value="Удалить" class="btn btn-danger" onclick="return confirm('Вы уверенны, что хотите удалить строку?')" />
+    </form>
+</div>

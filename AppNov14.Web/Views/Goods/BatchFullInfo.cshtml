@@ -1,0 +1,550 @@
+﻿@using AppNov14.Helpers
+@using Castle.Core.Internal
+@model AppNov14.Web.ViewModels.Goods.BatchFullInfoViewModel
+
+@{
+    var hasBatch = this.Model.Batch != null;
+    var hasCustomers = hasBatch && this.Model.Batch?.BatchHistories != null && this.Model.Batch.BatchHistories.Any(m => !m.CustomerName.IsNullOrEmpty());
+    var hasCompounds = hasBatch && this.Model.Batch?.Compounds != null && this.Model.Batch.Compounds.Any();
+    var hasHistory = hasBatch && this.Model.Batch?.BatchHistories != null && this.Model.Batch.BatchHistories.Any();
+    var hasCurrentQuantity = hasBatch && this.Model.Batch.CurrentQuantity.HasValue && this.Model.Batch.CurrentPackage.HasValue;
+    var hasInitialQuantity = hasBatch && this.Model.Batch.InitialQuantity.HasValue && this.Model.Batch.InitialPackage.HasValue && this.Model.Batch.CompletionDate.HasValue;
+    var hasValue = hasInitialQuantity && hasCurrentQuantity;
+    var wasUtilized = hasHistory && this.Model.Batch.BatchHistories.Any(m => m.ActionTypeId == BatchHistoryActions.UtilizationAction);
+}
+
+@if (this.Model.Batch != null)
+{
+    <div class="form-display-text form-display-text__status">
+        <span>Информация о партии «@this.Model.Batch.Name»</span>
+        <span class="status-text @this.Model.Batch.StatusCssClass" data-toggle="tooltp" title="Статус" data-placement="bottom">@BatchStatuses.GetName(this.Model.Batch.StatusId)</span>
+    </div>
+    <div class="form-display-container">
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>#Id</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Batch.Id</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Название</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Batch.Name</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Тип</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Batch.Type</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Линия</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Batch.Line</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Автоматическая дата</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Batch.InsertDate</span>
+            </div>
+        </div>
+        @if (this.Model.Batch.CreateDate.HasValue)
+        {
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Дата создания партии</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@this.Model.Batch.CreateDate.Value.ToString("dd.MM.yyyy")</span>
+                </div>
+            </div>
+        }
+        @if (hasInitialQuantity)
+        {
+            <div class="base-divider"></div>
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Изначальный вес</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@this.Model.Batch.InitialQuantity</span>
+                </div>
+            </div>
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Изначальное количество баулов</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@this.Model.Batch.InitialPackage</span>
+                </div>
+            </div>
+            @if (this.Model.Batch.CompletionDate.HasValue)
+            {
+                <div class="child-form-display__item row">
+                    <div class="form-display__item-name col-3 col-md-3">
+                        <span>Дата завершения производства и отправки на склад</span>
+                    </div>
+                    <div class="form-display__item-value col-6 col-md-6">
+                        <span>@this.Model.Batch.CompletionDate.Value.ToString("dd.MM.yyyy")</span>
+                    </div>
+                </div>
+            }
+        }
+        @if (hasCurrentQuantity)
+        {
+            <div class="base-divider"></div>
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Текущий вес</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@this.Model.Batch.CurrentQuantity</span>
+                </div>
+            </div>
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Текущее количество баулов</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@this.Model.Batch.CurrentPackage</span>
+                </div>
+            </div>
+        }
+        @if (hasCustomers)
+        {
+            <div class="base-divider"></div>
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Покупатели</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    @foreach (var customer in this.Model.Batch.BatchHistories.GroupBy(m => m.CustomerId).Select(m => m.FirstOrDefault()).Select(m => m.CustomerName).ToList())
+                    {
+                        <div>@customer</div>
+                    }
+                </div>
+            </div>
+            @if (this.Model.Batch.BatchHistories.Any(n => n.ActionTypeId == BatchHistoryActions.ReturnFromCustomerAction))
+            {
+                <div class="base-divider"></div>
+                <div class="child-form-display__item row">
+                    <div class="form-display__item-name col-3 col-md-3">
+                        <span>Возврат от</span>
+                    </div>
+                    <div class="form-display__item-value col-6 col-md-6">
+                        @foreach (var customer in this.Model.Batch.BatchHistories.Where(m => m.ActionTypeId == BatchHistoryActions.ReturnFromCustomerAction).GroupBy(m => m.CustomerId).Select(m => m.FirstOrDefault()).Select(m => m.CustomerName).ToList())
+                        {
+                            <div>@customer</div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    @if (!wasUtilized)
+    {
+        <div class="display-input-group">
+            @if (this.Model.Batch.StatusId == BatchStatuses.NoData || this.Model.Batch.StatusId == BatchStatuses.InManufacturingProcess)
+            {
+                <a class="btn btn-secondary-child" asp-action="MoveCompletedBatch" asp-controller="Goods" asp-route-id="@this.Model.Batch.Id">
+                    <span class="btn-link-text">Внести партию на склад</span>
+                    <i class="btn-icon icon-s20spatial_base_add"></i>
+                </a>
+            }
+            @if (this.Model.Batch.StatusId == BatchStatuses.Completed && hasValue && this.Model.Batch.CurrentQuantity > 0 && this.Model.Batch.CurrentPackage > 0)
+            {
+                <a class="btn btn-secondary-child" asp-action="SellBatch" asp-controller="Goods" asp-route-id="@this.Model.Batch.Id">
+                    <span class="btn-link-text">Отгрузить</span>
+                    <i class="btn-icon icon-s20send_more_box"></i>
+                </a>
+            }
+            @if (hasCustomers && hasValue && ((this.Model.Batch.StatusId == BatchStatuses.Completed && this.Model.Batch.InitialPackage != this.Model.Batch.CurrentPackage && this.Model.Batch.InitialQuantity != this.Model.Batch.CurrentQuantity) || (this.Model.Batch.StatusId == BatchStatuses.Empty)))
+            {
+                <a class="btn btn-secondary-child" asp-action="ReturnBatch" asp-controller="Goods" asp-route-id="@this.Model.Batch.Id">
+                    <span class="btn-link-text">Возврат от клиента</span>
+                    <i class="btn-icon icon-s20undo"></i>
+                </a>
+            }
+            @if (this.Model.Batch.StatusId == BatchStatuses.Completed && hasValue && this.Model.Batch.CurrentQuantity > 0 && this.Model.Batch.CurrentPackage > 0)
+            {
+                <a class="btn btn-secondary-child" asp-action="MergeBatch" asp-controller="Goods" asp-route-id="@this.Model.Batch.Id">
+                    <span class="btn-link-text">Добавить в другую</span>
+                    <i class="btn-icon icon-s20upload_in_existing_map"></i>
+                </a>
+            }
+            @if (this.Model.Batch.StatusId == BatchStatuses.Completed && hasValue && this.Model.Batch.CurrentQuantity > 0 && this.Model.Batch.CurrentPackage > 0)
+            {
+                <a class="btn btn-primary-danger" asp-action="ThrowBatch" asp-controller="Goods" asp-route-id="@this.Model.Batch.Id">
+                    <span class="btn-link-text">Утилизировать</span>
+                    <i class="btn-icon icon-s20delete1"></i>
+                </a>
+            }
+        </div>
+
+    }
+    <div class="base-divider"></div>
+    <div class="form-display-text">
+        <span>Состав партии</span>
+    </div>
+    <div class="table-wrapper">
+        @if (!hasCompounds)
+        {
+            <div class="empty-result">
+                <span>Записи не найдены</span>
+            </div>
+        }
+        else
+        {
+            <table class="table table-standart">
+                <thead>
+                    <tr>
+                        <th>
+                            Тип материала
+                        </th>
+                        <th>
+                            Наименование типа материала
+                        </th>
+                        <th>
+                            Поставщик
+                        </th>
+                        <th>
+                            Производитель
+                        </th>
+                        <th>
+                            Количество
+                        </th>
+                        <th>
+                            Паспорт
+                        </th>
+                        <th>
+                            Дата
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in this.Model.Batch.Compounds)
+                    {
+                        <tr>
+                            <td>
+                                @item.Type
+                            </td>
+                            <td>
+                                @item.SubType
+                            </td>
+                            <td>
+                                @item.Provider
+                            </td>
+                            <td>
+                                @item.Manufacturer
+                            </td>
+                            <td>
+                                @item.Quantity
+                            </td>
+                            <td>
+                                @if (item.IndexId.HasValue)
+                                {
+                                    <a asp-action="IndexInfo" asp-controller="Manufacturing" asp-route-indexId="@item.IndexId" target="_blank">@item.Index</a>
+                                }
+                                else
+                                {
+                                    @item.Index
+                                }
+                            </td>
+                            <td>
+                                @item.DocDate.ToString("dd.MM.yyyy")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    @if (hasHistory)
+    {
+        <div class="base-divider"></div>
+        <div class="form-display-text">
+            <span>История партии</span>
+        </div>
+        <div class="history-container">
+            @{
+                var lastId = this.Model.Batch.BatchHistories.Last().Id;
+                var recordIds =  this.Model.Batch.BatchHistories.Where(m => m.ActionTypeId != BatchHistoryActions.UtilizationAction && m.ActionTypeId != BatchHistoryActions.CreateAction && m.ActionTypeId != BatchHistoryActions.MergingFromOtherAction && m.OperationTypeId != BatchHistoryOperations.InformationOperation && m.ActionTypeId != BatchHistoryActions.MergeToOtherAction).ToList();
+                var lastRecordId = recordIds.Any() ? recordIds.Last().Id : 0;
+            }
+            @foreach (var item in this.Model.Batch.BatchHistories)
+            {
+                <div class="history-block">
+                    <div class="history-stats">
+                        @if (item.OperationTypeId != BatchHistoryOperations.InformationOperation)
+                        {
+                            <div class="history-stats-action @item.ActionCssClass">@item.ActionTypeName</div>
+                        }
+                        @if (item.OperationTypeId != BatchHistoryOperations.UsualOperation)
+                        {
+                            <div class="history-stats-operation @item.OperationCssClass">@item.OperationTypeName</div>
+                        }
+                        @if ((User.IsInRole("Admin") || User.IsInRole("Moderator")) && item.ActionTypeId != BatchHistoryActions.UtilizationAction && item.ActionTypeId != BatchHistoryActions.CreateAction && item.ActionTypeId != BatchHistoryActions.MergingFromOtherAction && item.OperationTypeId != BatchHistoryOperations.InformationOperation && item.ActionTypeId != BatchHistoryActions.MergeToOtherAction)
+                        {
+                            <a class="icon-moon-standart" asp-action="EditHistory" asp-controller="Goods" asp-route-id="@item.BatchId" asp-route-actionId="@item.ActionTypeId" asp-route-historyId="@item.Id">
+                                <i class="btn-icon icon-s20edit1"></i>
+                            </a>
+                            if (item.Id == lastRecordId)
+                            {
+                                <a onclick="return confirm('Вы уверенны, что хотите удалить запись?')" class="icon-moon-standart" asp-action="DeleteHistory" asp-controller="Goods" asp-route-id="@item.BatchId" asp-route-actionId="@item.ActionTypeId" asp-route-historyId="@item.Id">
+                                    <i class="btn-icon icon-s20delete1"></i>
+                                </a>
+                            }
+                        }
+                        <div class="history-stats-date">@item.InsertDate</div>
+                    </div>
+                    <div class="history-text-frame">
+                        <span>@item.Text</span>
+                        @if (item.ActionTypeId == BatchHistoryActions.CreateAction)
+                        {
+                            <div class="history-text-frame-added-info">
+                                <div>Тип партии: <strong>@this.Model.Batch.Type</strong></div>
+                                <div>Линия: <strong>@this.Model.Batch.Line</strong></div>
+                                @if (this.Model.Batch.CreateDate.HasValue)
+                                {
+                                    <div>Дата начала производства: <strong>@this.Model.Batch.CreateDate.Value.ToString("dd.MM.yyyy")</strong></div>
+                                }
+                            </div>
+                            @if (!item.Remark.IsNullOrEmpty())
+                            {
+                                <div class="history-text-frame-added-info">@item.Remark</div>
+                            }
+                        }
+                        else if (item.ActionTypeId == BatchHistoryActions.CompleteAction)
+                        {
+                            <div class="history-text-frame-added-info">
+                                <div>Начальный вес: <strong>@this.Model.Batch.InitialQuantity</strong> кг.</div>
+                                <div>Начальное количество баулов: <strong>@this.Model.Batch.InitialPackage</strong></div>
+                                @if (this.Model.Batch.CompletionDate.HasValue)
+                                {
+                                    <div>Дата завершения производства и отправки на склад: <strong>@this.Model.Batch.CompletionDate.Value.ToString("dd.MM.yyyy")</strong></div>
+                                }
+                            </div>
+                            <div class="history-text-frame-added-info">
+                                <div>Остаточный вес на данную дату: <strong>@item.LeftQuantity</strong> кг.</div>
+                                <div>Остаточное количество баулов на данную дату: <strong>@item.LeftPackage</strong></div>
+                            </div>
+                            @if (!item.Remark.IsNullOrEmpty())
+                            {
+                                <div class="history-text-frame-added-info">@item.Remark</div>
+                            }
+                        }
+                        else if (item.ActionTypeId == BatchHistoryActions.SellAction)
+                        {
+                            <div class="history-text-frame-added-info">
+                                <div>Вес: <strong>@item.Quantity</strong> кг.</div>
+                                <div>Количество баулов: <strong>@item.Package</strong></div>
+                                @if (item.SoldDate.HasValue)
+                                {
+                                    <div>Дата отгрузки: <strong>@item.SoldDate.Value.ToString("dd.MM.yyyy")</strong></div>
+                                }
+                                <div>Покупатель: <strong>@item.CustomerName</strong></div>
+                            </div>
+                            <div class="history-text-frame-added-info">
+                                <div>Остаточный вес на данную дату: <strong>@item.LeftQuantity</strong> кг.</div>
+                                <div>Остаточное количество баулов на данную дату: <strong>@item.LeftPackage</strong></div>
+                            </div>
+                            @if (!item.Remark.IsNullOrEmpty())
+                            {
+                                <div class="history-text-frame-added-info">@item.Remark</div>
+                            }
+                        }
+                        else if (item.ActionTypeId == BatchHistoryActions.ReturnFromCustomerAction)
+                        {
+                            <div class="history-text-frame-added-info">
+                                <div>Вес: <strong>@item.Quantity</strong> кг.</div>
+                                <div>Количество баулов: <strong>@item.Package</strong></div>
+                                @if (item.ReturnDate.HasValue)
+                                {
+                                    <div>Дата возврата: <strong>@item.ReturnDate.Value.ToString("dd.MM.yyyy")</strong></div>
+                                }
+                                <div>Возврат от: <strong>@item.CustomerName</strong></div>
+                            </div>
+                            <div class="history-text-frame-added-info">
+                                <div>Остаточный вес на данную дату: <strong>@item.LeftQuantity</strong> кг.</div>
+                                <div>Остаточное количество баулов на данную дату: <strong>@item.LeftPackage</strong></div>
+                            </div>
+                            @if (!item.Remark.IsNullOrEmpty())
+                            {
+                                <div class="history-text-frame-added-info">Причина: @item.Remark</div>
+                            }
+                        }
+                        else if (item.ActionTypeId == BatchHistoryActions.MergeToOtherAction)
+                        {
+                            <div class="history-text-frame-added-info">
+                                <div>Вес: <strong>@item.Quantity</strong> кг.</div>
+                                <div>Количество баулов: <strong>@item.Package</strong></div>
+                                <div>Номер партии: «<strong><a asp-action="BatchFullInfo" asp-controller="Goods" asp-route-id="@item.LinkedBatchId" target="_blank">@item.LinkedBatchName</a></strong>»</div>
+                            </div>
+                            <div class="history-text-frame-added-info">
+                                <div>Остаточный вес на данную дату: <strong>@item.LeftQuantity</strong> кг.</div>
+                                <div>Остаточное количество баулов на данную дату: <strong>@item.LeftPackage</strong></div>
+                            </div>
+                            @if (!item.Remark.IsNullOrEmpty())
+                            {
+                                <div class="history-text-frame-added-info">@item.Remark</div>
+                            }
+                        }
+                        else if (item.ActionTypeId == BatchHistoryActions.MergingFromOtherAction)
+                        {
+                            <div class="history-text-frame-added-info">
+                                <div>Номер партии: «<strong><a asp-action="BatchFullInfo" asp-controller="Goods" asp-route-id="@item.LinkedBatchId" target="_blank">@item.LinkedBatchName</a></strong>»</div>
+                            </div>
+                            @if (!item.Remark.IsNullOrEmpty())
+                            {
+                                <div class="history-text-frame-added-info">@item.Remark</div>
+                            }
+                        }
+                        else if (item.ActionTypeId == BatchHistoryActions.UtilizationAction)
+                        {
+                            <div class="history-text-frame-added-info">
+                                <div>Утилизировано (вес): <strong>@item.Quantity</strong> кг.</div>
+                                <div>Утилизировано баулов: <strong>@item.Package</strong></div>
+                            </div>
+                            @if (!item.Remark.IsNullOrEmpty())
+                            {
+                                <div class="history-text-frame-added-info">@item.Remark</div>
+                            }
+                        }
+                    </div>
+                    @if (lastId != item.Id)
+                    {
+                        <div class="history-block-icon">
+                            <span class="icon-s16angle-down"></span>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+    @if (this.Model.Batch.ChildBatches != null && this.Model.Batch.ChildBatches.Any())
+    {
+        <div class="base-divider"></div>
+        <div class="form-display-text">
+            <span>В партию были добавлены:</span>
+        </div>
+        <div class="form-display-container">
+            @{var count = 1;}
+            @foreach (var childBatch in this.Model.Batch.ChildBatches)
+            {
+                <div class="child-form-display__item row">
+                    <div class="form-display__item-name col-3 col-md-3">
+                        <span>@count</span>
+                    </div>
+                </div>
+                <div class="child-form-display-container">
+                    <div class="child-form-display__item__child row">
+                        <div class="form-display__item-name__child col-3 col-md-3">
+                            <span>Id</span>
+                        </div>
+                        <div class="form-display__item-value__child col-6 col-md-6">
+                            <span>@childBatch.Id</span>
+                        </div>
+                    </div>
+                    <div class="child-form-display__item__child row">
+                        <div class="form-display__item-name__child col-3 col-md-3">
+                            <span>Название</span>
+                        </div>
+                        <div class="form-display__item-value__child col-6 col-md-6">
+                            <span><a asp-action="BatchFullInfo" asp-controller="Goods" asp-route-id="@childBatch.Id" target="_blank">@childBatch.Name</a></span>
+                        </div>
+                    </div>
+                    <div class="child-form-display__item__child row">
+                        <div class="form-display__item-name__child col-3 col-md-3">
+                            <span>Тип</span>
+                        </div>
+                        <div class="form-display__item-value__child col-6 col-md-6">
+                            <span>@childBatch.Type</span>
+                        </div>
+                    </div>
+                    <div class="child-form-display__item__child row">
+                        <div class="form-display__item-name__child col-3 col-md-3">
+                            <span>Линия</span>
+                        </div>
+                        <div class="form-display__item-value__child col-6 col-md-6">
+                            <span>@childBatch.Line</span>
+                        </div>
+                    </div>
+                </div>
+                count++;
+            }
+
+        </div>
+    }
+    @if (this.Model.Batch.ParentBatches != null && this.Model.Batch.ParentBatches.Any())
+    {
+        <div class="base-divider"></div>
+        <div class="form-display-text">
+            <span>Партия была добавлена в:</span>
+        </div>
+        <div class="form-display-container">
+            @{var count = 1;}
+            @foreach (var parentBatch in this.Model.Batch.ParentBatches)
+            {
+                <div class="child-form-display__item row">
+                    <div class="form-display__item-name col-3 col-md-3">
+                        <span>@count</span>
+                    </div>
+                </div>
+                <div class="child-form-display-container">
+                    <div class="child-form-display__item__child row">
+                        <div class="form-display__item-name__child col-3 col-md-3">
+                            <span>Id</span>
+                        </div>
+                        <div class="form-display__item-value__child col-6 col-md-6">
+                            <span>@parentBatch.Id</span>
+                        </div>
+                    </div>
+                    <div class="child-form-display__item__child row">
+                        <div class="form-display__item-name__child col-3 col-md-3">
+                            <span>Название</span>
+                        </div>
+                        <div class="form-display__item-value__child col-6 col-md-6">
+                            <span><a asp-action="BatchFullInfo" asp-controller="Goods" asp-route-id="@parentBatch.Id" target="_blank">@parentBatch.Name</a></span>
+                        </div>
+                    </div>
+                    <div class="child-form-display__item__child row">
+                        <div class="form-display__item-name__child col-3 col-md-3">
+                            <span>Тип</span>
+                        </div>
+                        <div class="form-display__item-value__child col-6 col-md-6">
+                            <span>@parentBatch.Type</span>
+                        </div>
+                    </div>
+                    <div class="child-form-display__item__child row">
+                        <div class="form-display__item-name__child col-3 col-md-3">
+                            <span>Линия</span>
+                        </div>
+                        <div class="form-display__item-value__child col-6 col-md-6">
+                            <span>@parentBatch.Line</span>
+                        </div>
+                    </div>
+                </div>
+                count++;
+            }
+
+        </div>
+    }
+}
+else
+{
+    <div class="empty-result">
+        <span>Нет данных</span>
+    </div>
+}

@@ -1,0 +1,47 @@
+﻿@model AppNov14.Web.ViewModels.Account.AccountLoginViewModel
+
+@{
+    Layout = null;
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] Gate</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<body background="images/purple.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card card-signin my-5">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Вход в приложение</h5>
+                        <form method="post" class="form-signin" asp-controller="Account" asp-action="Login"
+                              asp-route-returnUrl="@Model.ReturnUrl">
+                            <div asp-validation-summary="ModelOnly"></div>
+                            <div class="form-label-group">
+                                <label asp-for="LoginApp" class="control-label">Имя</label>
+                                <input asp-for="LoginApp" class="form-control" placeholder="Login" />
+                                <span asp-validation-for="LoginApp" class="text-danger"></span>
+                            </div>
+                            <br />
+                            <div class="form-label-group">
+                                <label asp-for="Password" class="control-label">Пароль</label>
+                                <input asp-for="Password" class="form-control" placeholder="Password" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <br />
+                            <div>
+                                <input type="submit" class="btn btn-info" value="Войти" />
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

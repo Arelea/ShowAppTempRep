@@ -1,0 +1,14 @@
+﻿@model AppNov14.Web.ViewModels.Roles.RoleCreateViewModel
+
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="Create" method="post">
+    <div class="form-row col-md-4">
+        <label asp-for="@this.Model.Form.RoleName" class="control-label">Новая роль</label>
+        <input asp-for="@this.Model.Form.RoleName" class="form-control" />
+    </div>
+    <div class="form-row input-btn-group">
+        <div class="form-group submit-btn">
+            <input type="submit" value="Добавить" class="btn btn-primary-submit">
+        </div>
+    </div>
+</form>

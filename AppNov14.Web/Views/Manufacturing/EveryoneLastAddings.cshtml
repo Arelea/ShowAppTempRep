@@ -1,0 +1,190 @@
+﻿@using AppNov14.Helpers
+@model AppNov14.Web.ViewModels.ManufacturingTable.EveryoneLastAddingsViewModel
+
+@{
+    Layout = "_TableLayout";
+    var items = this.Model.Items;
+}
+
+<div class="table-wrapper">
+    @if (items == null || !items.Any())
+    {
+        <div class="empty-result">
+            <span>Записи не найдены</span>
+        </div>
+    }
+    else
+    {
+        <table align="center" class="table table-standart">
+            <thead>
+                <tr>
+                    <th>
+                        Действие
+                    </th>
+                    <th>
+                        #Id
+                    </th>
+                    <th>
+                        Тип материала
+                    </th>
+                    <th>
+                        Наименование типа материала
+                    </th>
+                    <th>
+                        Поставщик
+                    </th>
+                    <th>
+                        Производитель
+                    </th>
+                    <th>
+                        Паспорт
+                    </th>
+                    <th>
+                        Количество
+                    </th>
+                    <th>
+                        Остатки
+                    </th>
+                    <th>
+                        Номер партии
+                    </th>
+                    <th>
+                        Тип партии
+                    </th>
+                    <th>
+                        Линия
+                    </th>
+                    <th>
+                        Номер документа
+                    </th>
+                    <th>
+                        Дата
+                    </th>
+                    <th>
+                        Дата создания
+                    </th>
+                    <th>
+                        Имя сотрудника
+                    </th>
+                    <th>
+                        IP Адресс
+                    </th>
+                    <th>
+                        Примечание
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in items)
+                {
+                    <tr class="@(item.ActionType == RawActionTypes.Replenishment ? "edit-list-tr-replenish" : "edit-list-tr-writeoff")">
+                        <td>
+                            @{
+                                RenderOperationType(item.ActionType);
+                            }
+                        </td>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.Type
+                        </td>
+                        <td>
+                            @item.SubType
+                        </td>
+                        <td>
+                            @item.Provider
+                        </td>
+                        <td>
+                            @item.Manufacturer
+                        </td>
+                        @if (item.ExpirationDate.HasValue)
+                        {
+                            <td data-toggle="tooltip" title="@($"Срок годности: {item.ExpirationDate.Value:dd.MM.yyyy}")" data-placement="bottom">
+                                @if (item.IndexId.HasValue)
+                                {
+                                    <a asp-action="IndexInfo" asp-route-indexId="@item.IndexId" target="_blank">@item.Index</a>
+                                }
+                                else
+                                {
+                                    @item.Index
+                                }
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @if (item.IndexId.HasValue)
+                                {
+                                    <a asp-action="IndexInfo" asp-route-indexId="@item.IndexId" target="_blank">@item.Index</a>
+                                }
+                                else
+                                {
+                                    @item.Index
+                                }
+                            </td>
+                        }
+                        <td>
+                            @item.Quantity
+                        </td>
+                        <td>
+                            @item.Leftovers
+                        </td>
+                        <td>
+                            @if (item.BatchId.HasValue)
+                            {
+                                <a asp-action="BatchInfo" asp-route-batchId="@item.BatchId" target="_blank">@item.BatchName</a>
+                            }
+                            else
+                            {
+                                @item.BatchName
+                            }
+                        </td>
+                        <td>
+                            @item.BatchType
+                        </td>
+                        <td>
+                            @item.BatchLine
+                        </td>
+                        <td>
+                            @item.ReplenishmentDocument
+                        </td>
+                        <td>
+                            @item.DocDate.ToString("dd.MM.yyyy")
+                        </td>
+                        <td>
+                            @item.InsertDate
+                        </td>
+                        <td>
+                            @item.Employee
+                        </td>
+                        <td>
+                            @item.IpAddress
+                        </td>
+                        <td>
+                            @item.Remarks
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@{
+    void RenderOperationType(int operationType)
+    {
+        @if (operationType == RawActionTypes.Replenishment)
+        {
+            Write("Пополнение");
+        }
+        else if (operationType == RawActionTypes.WriteOff)
+        {
+            Write("Списание");
+        }
+        else
+        {
+            Write("Возвращение");
+        }
+    }
+}

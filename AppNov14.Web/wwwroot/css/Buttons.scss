@@ -1,0 +1,144 @@
+﻿.btn-primary-submit {
+    background-color: #fff;
+    border: 1px solid #83DAFF;
+    color: #495057;
+    text-align: inherit;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 16px;
+
+    &:hover {
+        text-decoration: none;
+        background-color: #C9FEFF;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem #83DAFF;
+    }
+}
+
+.btn-secondary-child {
+    background-color: #fff;
+    border: 1px solid #e0d3e5;
+    color: #495057;
+    text-align: inherit;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 16px;
+
+    &:hover {
+        text-decoration: none;
+        background-color: #f2f2f2;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem #e0d3e5;
+    }
+
+    .btn-link-text {
+        font-size: 16px;
+        color: #495057;
+        margin-right: 10px;
+        vertical-align: central;
+    }
+}
+
+.submit-btn {
+    padding-right: 10px;
+    padding-left: 5px;
+}
+
+.child-btn {
+    padding-right: 10px;
+}
+
+.input-btn-group {
+    margin-top: 10px;
+}
+
+.btn-primary-warn {
+    background-color: #fff;
+    border: 1px solid #F3FE00;
+    color: #495057;
+    text-align: inherit;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 16px;
+
+    &:hover {
+        text-decoration: none;
+        background-color: #FCFFB0;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem #F3FE00;
+    }
+
+    .btn-link-text {
+        font-size: 16px;
+        color: #495057;
+        margin-right: 10px;
+        vertical-align: central;
+    }
+}
+
+.btn-link {
+    background-color: #fff;
+    border: 1px solid #95FFFA;
+    border-radius: 5px;
+    font-weight: 500;
+    align-items: center;
+
+    &:hover {
+        text-decoration: none;
+        background-color: #EAFEFD;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem #95FFFA;
+    }
+
+    .btn-link-text {
+        font-size: 16px;
+        color: #495057;
+        margin-right: 10px;
+        vertical-align: central;
+    }
+}
+
+.btn-icon {
+    color: #979797;
+    vertical-align: central;
+}
+
+.display-input-group {
+    margin-left: 10px;
+}
+
+.btn-primary-danger {
+    background-color: #ffd4d4;
+    border: 1px solid #ff3b3b;
+    border-radius: 5px;
+    font-weight: 500;
+    align-items: center;
+
+    &:hover {
+        text-decoration: none;
+        background-color: #f7adbb;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem #ff3b3b;
+    }
+
+    .btn-link-text {
+        font-size: 16px;
+        color: #495057;
+        margin-right: 10px;
+        vertical-align: central;
+    }
+}
+
+.icon-moon-standart {
+    padding-right: 10px;
+}

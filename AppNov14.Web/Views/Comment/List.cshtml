@@ -1,0 +1,60 @@
+﻿@using AppNov14.Helpers
+@model AppNov14.Web.ViewModels.Comment.CommentListViewModel
+
+@{
+    var items = this.Model.Items;
+}
+
+<div class="form-row">
+    <div class="form-group child-btn">
+        <a class="btn btn-secondary-child" asp-action="Create">Создать комментарий</a>
+    </div>
+    <form asp-action="List">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <select asp-for="@this.Model.Status" class="form-control" asp-items="@(new SelectList(this.Model.Statuses, "Value", "Text"))"></select>
+        <span asp-validation-for="@this.Model.Status" class="text-danger"></span>
+    </form>
+</div>
+@if (items == null || !items.Any())
+{
+    <div class="empty-result">
+        <span>Записи не найдены</span>
+    </div>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Название</th>
+            <th>Сотрудник</th>
+            <th>Дата</th>
+            <th>Тип</th>
+            <th></th>
+        </tr>
+        @foreach (var item in items)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Employee</td>
+                <td>@item.InsertDate</td>
+                <td>@CommentType.GetType(item.Type)</td>
+                <td>
+                    <div class="form-group child-btn">
+                        <a class="btn btn-secondary-child" asp-action="View" asp-route-id="@item.Id">Просмотреть</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(function () {
+        $('#Status').change(function () {
+            $('form').submit();
+        });
+    });
+</script>

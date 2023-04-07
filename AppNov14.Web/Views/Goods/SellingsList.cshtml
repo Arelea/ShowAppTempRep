@@ -1,0 +1,153 @@
+﻿@using AppNov14.Helpers
+@model AppNov14.Web.ViewModels.Goods.SellingsListViewModel
+
+@{
+    Layout = "_TableLayout";
+    var items = this.Model.Items;
+}
+
+<div class="table-inputs">
+    <form asp-action="SellingsList">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="@this.Model.Form.Query" class="control-label">Поисковый запрос</label>
+                <input asp-for="@this.Model.Form.Query" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.Query" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="base-edit-form-divider"></div>
+        <div class="form-row">
+            <div class="form-group col-md-1">
+                <label asp-for="@this.Model.Form.SellDateFrom" class="control-label">От</label>
+                <input asp-for="@this.Model.Form.SellDateFrom" type="date" min="2019-01-01" max="2050-12-31" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.SellDateFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-1">
+                <label asp-for="@this.Model.Form.SellDateTo" class="control-label">До</label>
+                <input asp-for="@this.Model.Form.SellDateTo" type="date" min="2019-01-01" max="2050-12-31" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.SellDateTo" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="@this.Model.Form.CustomerId" class="control-label">Покупатель</label>
+                <select asp-for="@this.Model.Form.CustomerId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.CustomerList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.CustomerId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label asp-for="@this.Model.Form.BatchId" class="control-label">Номер партии</label>
+                <select asp-for="@this.Model.Form.BatchId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.BatchNameList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.BatchId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row input-btn-group">
+            <div class="form-group submit-btn">
+                <input type="submit" value="Найти" class="btn btn-primary-submit">
+            </div>
+            <div class="form-group child-btn">
+                <button class="btn btn-primary-warn btn-clear-filters">
+                    <span>Очистить фильтры</span>
+                </button>
+            </div>
+            <div class="form-group child-btn">
+                <a class="btn btn-secondary-child" asp-action="DownloadSellingsExcel" asp-controller="Goods">
+                    <span class="btn-link-text">Скачать Excel</span>
+                    <i class="icon-s20download1"></i>
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-wrapper">
+    @if (items == null || !items.Any())
+    {
+    <div class="empty-result">
+        <span>Записи не найдены</span>
+    </div>
+    }
+    else
+    {
+    <table align="center" class="table table-standart">
+        <thead>
+            <tr>
+                <th>
+                    #HId
+                </th>
+                <th>
+                    Номер партии
+                </th>
+                <th>
+                    Тип
+                </th>
+                <th>
+                    Покупатель
+                </th>
+                <th>
+                    Количество
+                </th>
+                <th>
+                    Оставшееся количество на дату продажи
+                </th>
+                <th>
+                    Дата
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+                {
+            <tr>
+                <td>
+                    @item.HistoryId
+                    <span class="d-none">@item.BatchId</span>
+                </td>
+                <td>
+                    <a asp-action="BatchFullInfo" asp-controller="Goods" asp-route-id="@item.BatchId">@item.BatchName</a>
+                </td>
+                <td>
+                    @item.TypeName
+                </td>
+                <td>
+                    <a asp-action="CustmerStatistic" asp-controller="Goods" asp-route-id="@item.CustomerId">@item.CustomerName</a>
+                </td>
+                <td>
+                    @($"{item.Quantity} кг. ({item.Package} баул.)")
+                </td>
+                <td>
+                    @($"{item.LeftQuantity} кг. ({item.LeftPackage} баул.)")
+                </td>
+                <td>
+                    @item.SoldDate.ToString("dd.MM.yyyy")
+                </td>
+            </tr>
+                }
+        </tbody>
+    </table>
+    }
+</div>
+
+<script>
+    $(function () {
+        $("#Form_CustomerId").change(function () {
+            $.ajax({
+                url: "/Goods/GetBatchByCustomer",
+                type: 'POST',
+                cache: false,
+                data: { statusId: $('#Form_CustomerId').val(), actionHistoryType: @BatchHistoryActions.SellAction },
+                dataType: 'json',
+                success: function (data) {
+                    $("#Form_BatchId").empty();
+                    $.each(data, function (index, value) {
+                        $("#Form_BatchId").append($('<option/>', { value: value.value, text: value.text }));
+                    });
+                }
+            });
+        });
+
+        $('.btn-clear-filters').click(function () {
+            $('form').find('select, input').val("@null");
+            $('form').submit();
+        });
+    });
+</script>

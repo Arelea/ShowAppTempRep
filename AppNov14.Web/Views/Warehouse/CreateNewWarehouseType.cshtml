@@ -1,0 +1,129 @@
+﻿@model AppNov14.Web.ViewModels.Warehouse.WarehouseCreateNewWarehouseTypeViewModel
+
+<form asp-action="CreateNewWarehouseType" autocomplete="on">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="@this.Model.Form.Type" class="control-label">Тип материала</label>
+        <input asp-for="@this.Model.Form.Type" class="form-control" />
+        <span asp-validation-for="@this.Model.Form.Type" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@this.Model.Form.SubType" class="control-label">Наименование типа материала</label>
+        <input asp-for="@this.Model.Form.SubType" class="form-control" />
+        <span asp-validation-for="@this.Model.Form.SubType" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@this.Model.Form.Provider" class="control-label">Поставщик</label>
+        <input asp-for="@this.Model.Form.Provider" class="form-control" />
+        <span asp-validation-for="@this.Model.Form.Provider" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@this.Model.Form.Manufacturer" class="control-label">Производитель</label>
+        <input asp-for="@this.Model.Form.Manufacturer" class="form-control" />
+        <span asp-validation-for="@this.Model.Form.Manufacturer" class="text-danger"></span>
+    </div>
+    <div class="form-row input-btn-group">
+        <div class="form-group submit-btn">
+            <input type="submit" value="Сохранить" class="btn btn-primary-submit" onclick="return confirm('Вы уверенны, что хотите добавить новый тип?')">
+        </div>
+    </div>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery-ui.js"></script>
+<link href="~/jquery-ui.css" rel="stylesheet" />
+<script type="text/javascript">
+    $(function () {
+        $("#Form_Type").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Warehouse/GetTypeJson',
+                    type: 'POST',
+                    cache: false,
+                    data: { Prefix: request.term, mode: 1 },
+                    dataType: 'json',
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                value: item.value
+                            }
+                        }))
+                    }
+                });
+            },
+            error: function (response) { alert(response.responseText); },
+            failure: function (response) { alert(response.responseText); }
+        });
+    });
+    $(function () {
+        $("#Form_SubType").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Warehouse/GetSubTypeJson',
+                    type: 'POST',
+                    cache: false,
+                    data: { Prefix: request.term, mode: 1 },
+                    dataType: 'json',
+
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                value: item.value
+                            }
+                        }))
+                    }
+                });
+            },
+            error: function (response) { alert(response.responseText); },
+            failure: function (response) { alert(response.responseText); }
+        });
+    });
+    $(function () {
+        $("#Form_Provider").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Warehouse/GetProviderJson',
+                    type: 'POST',
+                    cache: false,
+                    data: { Prefix: request.term, mode: 1 },
+                    dataType: 'json',
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                value: item.value
+                            }
+                        }))
+                    }
+                });
+            },
+            error: function (response) { alert(response.responseText); },
+            failure: function (response) { alert(response.responseText); }
+        });
+    });
+    $(function () {
+        $("#Form_Manufacturer").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Warehouse/GetManufacturerJson',
+                    type: 'POST',
+                    cache: false,
+                    data: { Prefix: request.term, mode: 1 },
+                    dataType: 'json',
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                value: item.value
+                            }
+                        }))
+                    }
+                });
+            },
+            error: function (response) { alert(response.responseText); },
+            failure: function (response) { alert(response.responseText); }
+        });
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,177 @@
+﻿@using AppNov14.Helpers
+@model AppNov14.Web.ViewModels.Goods.ReturnBatchViewModel
+
+    <div class="form-display-container">
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>#Id</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Item.Id</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Название</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span><a asp-action="BatchFullInfo" asp-controller="Goods" asp-route-id="@this.Model.Item.Id" target="_blank">@this.Model.Item.Name</a></span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Статус</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@BatchStatuses.GetName(this.Model.Item.StatusId)</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Тип</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Item.Type</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Линия</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Item.Line</span>
+            </div>
+        </div>
+        @foreach (var item in this.Model.Item.ValueList.OrderBy(m => m.CustomerName))
+        {
+            <div class="base-divider"></div>
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Покупатель</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@item.CustomerName</span>
+                </div>
+            </div>
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Суммарный вес</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@item.SumQuantity</span>
+                </div>
+            </div>
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Суммарное количество баулов</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@item.SumPackage</span>
+                </div>
+            </div>
+            if (item.SumReturnQuantity.HasValue && item.SumReturnPackage.HasValue)
+            {
+                <div class="child-form-display__item row">
+                    <div class="form-display__item-name col-3 col-md-3">
+                        <span>Возвращенный суммарный вес</span>
+                    </div>
+                    <div class="form-display__item-value col-6 col-md-6">
+                        <span>@item.SumReturnQuantity</span>
+                    </div>
+                </div>
+                <div class="child-form-display__item row">
+                    <div class="form-display__item-name col-3 col-md-3">
+                        <span>Возвращенное суммарное количество баулов</span>
+                    </div>
+                    <div class="form-display__item-value col-6 col-md-6">
+                        <span>@item.SumReturnPackage</span>
+                    </div>
+                </div>
+            }
+            var count = 1;
+            foreach (var param in item.Params)
+            {
+                <div class="child-form-display-container">
+                    <span>Отгрузка №@(count)</span>
+                    <div class="child-form-display__item__child row">
+                        <div class="form-display__item-name__child col-3 col-md-3">
+                            <span>Вес</span>
+                        </div>
+                        <div class="form-display__item-value__child col-6 col-md-6">
+                            <span>@param.Quantity</span>
+                        </div>
+                    </div>
+                    <div class="child-form-display__item__child row">
+                        <div class="form-display__item-name__child col-3 col-md-3">
+                            <span>Количество баулов</span>
+                        </div>
+                        <div class="form-display__item-value__child col-6 col-md-6">
+                            <span>@param.Package</span>
+                        </div>
+                    </div>
+                    <div class="child-form-display__item__child row">
+                        <div class="form-display__item-name__child col-3 col-md-3">
+                            <span>Дата отгрузки</span>
+                        </div>
+                        <div class="form-display__item-value__child col-6 col-md-6">
+                            <span>@param.SoldDate.ToString("dd.MM.yyyy")</span>
+                        </div>
+                    </div>
+                </div>
+                count++;
+            }
+        }
+    </div>
+
+<div class="base-divider"></div>
+
+<form asp-action="ReturnBatch" autocomplete="on">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@this.Model.Form.Id" />
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="@this.Model.Form.Quantity" class="control-label">Вес (кг.)</label>
+            <input asp-for="@this.Model.Form.Quantity" class="form-control" autocomplete="off" />
+            <span asp-validation-for="@this.Model.Form.Quantity" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="@this.Model.Form.Package" class="control-label">Количество баулов</label>
+            <input asp-for="@this.Model.Form.Package" class="form-control" autocomplete="off" />
+            <span asp-validation-for="@this.Model.Form.Package" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="@this.Model.Form.CustomerId" class="control-label">Покупатель</label>
+            <select asp-for="@this.Model.Form.CustomerId" class="form-control" asp-items="@(new SelectList(this.Model.Customers, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.CustomerId" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="@this.Model.Form.ReturnDate" class="control-label">Дата возврата</label>
+            <input asp-for="@this.Model.Form.ReturnDate" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" min="2012-01-01" max="2050-12-31" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.ReturnDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Remark" class="control-label">Причина</label>
+            <textarea asp-for="@this.Model.Form.Remark" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="@this.Model.Form.Remark" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row input-btn-group">
+        <div class="form-group submit-btn">
+            <input type="submit" value="Сохранить" class="btn btn-primary-submit" onclick="return confirm('Вы уверенны, что хотите вернуть партию?')">
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    $(function () {
+
+    })
+</script>

@@ -1,0 +1,210 @@
+﻿@model AppNov14.Web.ViewModels.ManufacturingTable.CreateOutcomingOrderViewModel
+
+
+<form asp-action="CreateOutcomingOrder" autocomplete="on">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Quantity" class="control-label">Количество</label>
+            <input asp-for="@this.Model.Form.Quantity" class="form-control" autocomplete="off" />
+            <span asp-validation-for="@this.Model.Form.Quantity" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Type" class="control-label">Тип материала</label>
+            <select asp-for="@this.Model.Form.Type" class="form-control" asp-items="@(new SelectList(this.Model.TypeList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.Type" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.SubType" class="control-label">Наименование типа материала</label>
+            <select asp-for="@this.Model.Form.SubType" class="form-control" asp-items="@(new SelectList(this.Model.SubTypeList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.SubType" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Provider" class="control-label">Поставщик</label>
+            <select asp-for="@this.Model.Form.Provider" class="form-control" asp-items="@(new SelectList(this.Model.ProviderList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.Provider" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Manufacturer" class="control-label">Производитель</label>
+            <select asp-for="@this.Model.Form.Manufacturer" class="form-control" asp-items="@(new SelectList(this.Model.ManufacturerList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.Manufacturer" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row new-batch-color-row">
+        <div class="form-group col-md-2 checkbox-helper">
+            <label asp-for="@this.Model.Form.IsNewBatch" class="control-label">Новая партия</label>
+            <input asp-for="@this.Model.Form.IsNewBatch" />
+        </div>
+    </div>
+    <div class="form-row new-batch-color-row">
+        <div class="form-group col-md-6 new-batch d-none">
+            <label asp-for="@this.Model.Form.BatchName" class="control-label">Номер партии</label>
+            <input asp-for="@this.Model.Form.BatchName" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.BatchName" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6 new-batch d-none">
+            <label asp-for="@this.Model.Form.BatchTypeId" class="control-label">Тип партии</label>
+            <select asp-for="@this.Model.Form.BatchTypeId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.BatchTypeList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.BatchTypeId" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6 new-batch d-none">
+            <label asp-for="@this.Model.Form.BatchLineId" class="control-label">Линия</label>
+            <select asp-for="@this.Model.Form.BatchLineId" class="form-control" asp-items="@(new SelectList(this.Model.BatchLineList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.BatchLineId" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6 new-batch d-none">
+            <label asp-for="@this.Model.Form.CreateDate" class="control-label">Дата создания партии</label>
+            <input asp-for="@this.Model.Form.CreateDate" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")"
+                   min="2010-01-01" max="2050-12-31" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.CreateDate" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6 old-batch">
+            <label asp-for="@this.Model.Form.BatchId" class="control-label">Номер партии</label>
+            <select asp-for="@this.Model.Form.BatchId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.BatchList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.BatchId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.IndexId" class="control-label">Паспорт</label>
+            <select asp-for="@this.Model.Form.IndexId" class="form-control" asp-items="@(new SelectList(this.Model.IndexList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.IndexId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.DocDate" class="control-label">Дата</label>
+            <input asp-for="@this.Model.Form.DocDate" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")"
+                   min="2010-01-01" max="2050-12-31" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.DocDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Remarks" class="control-label">Примечание</label>
+            <textarea asp-for="@this.Model.Form.Remarks" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="@this.Model.Form.Remarks" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row input-btn-group">
+        <div class="form-group submit-btn">
+            <input type="submit" value="Сохранить" class="btn btn-primary-submit" onclick="return confirm('Вы уверенны, что хотите списать сырье со склада?')">
+        </div>
+        <div class="form-group child-btn">
+            <a class="btn btn-secondary-child" asp-controller="Manufacturing" asp-action="MyLastAddings">Скопировать из моих последних записей</a>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(function () {
+        $('#Form_IsNewBatch').change(function () {
+            let $this = $(this);
+            let isNewBatchChecked = $this.is(":checked");
+
+            $('.new-batch-color-row').toggleClass("alert-warning", isNewBatchChecked);
+            $('.new-batch').toggleClass("d-none", !isNewBatchChecked);
+            $('.old-batch').toggleClass("d-none", isNewBatchChecked);      
+        });
+
+        $("#Form_Type").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_Type").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetSubTypeByTypeJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $('#Form_Type').val(), mode: 1 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_SubType").empty();
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_Provider").empty();
+                        $("#Form_IndexId").empty();
+                        $("#Form_SubType").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_SubType").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        });
+
+        $("#Form_SubType").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_SubType").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetFilledProviderByTypeAndSubTypeJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $('#Form_Type').val(), subType: $('#Form_SubType').val(), mode: 1 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_Provider").empty();
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_IndexId").empty();
+                        $("#Form_Provider").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_Provider").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        })
+
+        $("#Form_Provider").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_Provider").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetFilledManufacturerByTypeAndSubTypeAndProviderJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $("#Form_Type").val(), subType: $("#Form_SubType").val(), provider: $("#Form_Provider").val(), mode: 1 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_IndexId").empty();
+                        $("#Form_Manufacturer").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_Manufacturer").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        })
+
+        $("#Form_Manufacturer").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_Manufacturer").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetIndexationJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $("#Form_Type").val(), subType: $("#Form_SubType").val(), provider: $("#Form_Provider").val(), manufacturer: $("#Form_Manufacturer").val() },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_IndexId").empty();
+                        $("#Form_IndexId").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_IndexId").append($('<option/>', { value: value.value, text: value.text }));
+                        });
+                    }
+                });
+            }
+        })
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

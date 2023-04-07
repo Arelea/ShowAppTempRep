@@ -1,0 +1,104 @@
+﻿@model AppNov14.Web.ViewModels.Laboratory.ConsignmentNumberInfoLabViewModel
+
+@{
+    var items = this.Model.Items;
+}
+
+<form asp-action="ConsignmentNumberInfoLab">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="@this.Model.Number" class="control-label">Номер партии</label>
+            <select asp-for="@this.Model.Number" class="form-control" asp-items="@(new SelectList(this.Model.ConsignmentList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Number" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row input-btn-group">
+        <div class="form-group submit-btn">
+            <input type="submit" value="Найти" class="btn btn-primary-submit">
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<div class="table-wrapper">
+    @if (items == null || !items.Any())
+    {
+    <div class="empty-result">
+        <span>Записи не найдены</span>
+    </div>
+    }
+    else
+    {
+    <table align="center" class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    Тип материала
+                </th>
+                <th>
+                    Наименование типа материала
+                </th>
+                <th>
+                    Поставщик
+                </th>
+                <th>
+                    Производитель
+                </th>
+                <th>
+                    Количество
+                </th>
+                <th>
+                    Наименование партии
+                </th>
+                <th>
+                    Номер партии
+                </th>
+                <th>
+                    Паспорт
+                </th>
+                <th>
+                    Дата
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+                {
+            <tr>
+                <td>
+                    @item.Type
+                </td>
+                <td>
+                    @item.SubType
+                </td>
+                <td>
+                    @item.Provider
+                </td>
+                <td>
+                    @item.Manufacturer
+                </td>
+                <td>
+                    @item.Quantity
+                </td>
+                <td>
+                    @item.Document
+                </td>
+                <td>
+                    @item.DocumentNumber
+                </td>
+                <td>
+                    @item.Indexation
+                </td>
+                <td>
+                    @item.DocDate
+                </td>
+            </tr>
+                }
+        </tbody>
+    </table>
+    }
+</div>

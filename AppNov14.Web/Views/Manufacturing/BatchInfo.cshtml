@@ -1,0 +1,166 @@
+﻿@using AppNov14.Helpers
+@model AppNov14.Web.ViewModels.ManufacturingTable.BatchInfoViewModel
+
+<form asp-action="BatchInfo">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="@this.Model.BatchId" class="control-label">Номер партии</label>
+            <select asp-for="@this.Model.BatchId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.BatchList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.BatchId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row input-btn-group">
+        <div class="form-group submit-btn">
+            <input type="submit" value="Найти" class="btn btn-primary-submit">
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+@if (this.Model.BatchInformation != null)
+{
+    <div class="form-display-text form-display-text__status">
+        <span>Состав партии «@this.Model.BatchInformation.Name»</span>
+        <span class="status-text @this.Model.BatchInformation.StatusCssClass" data-toggle="tooltp" title="Статус" data-placement="bottom">@BatchStatuses.GetName(this.Model.BatchInformation.StatusId)</span>
+    </div>
+    <div class="form-display-container">
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>#Id</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.BatchInformation.Id</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Название</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.BatchInformation.Name</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Тип</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.BatchInformation.Type</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Линия</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.BatchInformation.Line</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Автоматическая дата</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.BatchInformation.InsertDate</span>
+            </div>
+        </div>
+        @if (this.Model.BatchInformation.CreateDate.HasValue)
+        {
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Дата создания партии</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@this.Model.BatchInformation.CreateDate.Value.ToString("dd.MM.yyyy")</span>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="display-input-group">
+        <a class="btn btn-secondary-child" asp-action="BatchFullInfo" asp-controller="Goods" asp-route-id="@this.Model.BatchInformation.Id">Подробнее</a>
+    </div>
+    <div class="base-divider"></div>
+    <div class="table-wrapper">
+        @if (this.Model.BatchInformation.Compounds == null || !this.Model.BatchInformation.Compounds.Any())
+        {
+            <div class="empty-result">
+                <span>Записи не найдены</span>
+            </div>
+        }
+        else
+        {
+            <table class="table table-standart">
+                <thead>
+                    <tr>
+                        <th>
+                            Тип материала
+                        </th>
+                        <th>
+                            Наименование типа материала
+                        </th>
+                        <th>
+                            Поставщик
+                        </th>
+                        <th>
+                            Производитель
+                        </th>
+                        <th>
+                            Количество
+                        </th>
+                        <th>
+                            Паспорт
+                        </th>
+                        <th>
+                            Дата
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in this.Model.BatchInformation.Compounds)
+                    {
+                        <tr>
+                            <td>
+                                @item.Type
+                            </td>
+                            <td>
+                                @item.SubType
+                            </td>
+                            <td>
+                                @item.Provider
+                            </td>
+                            <td>
+                                @item.Manufacturer
+                            </td>
+                            <td>
+                                @item.Quantity
+                            </td>
+                            <td>
+                                @if (item.IndexId.HasValue)
+                                {
+                                    <a asp-action="IndexInfo" asp-route-indexId="@item.IndexId" target="_blank">@item.Index</a>
+                                }
+                                else
+                                {
+                                    @item.Index
+                                }
+                            </td>
+                            <td>
+                                @item.DocDate.ToString("dd.MM.yyyy")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+}
+else
+{
+    <div class="empty-result">
+        <span>Нет данных</span>
+    </div>
+}

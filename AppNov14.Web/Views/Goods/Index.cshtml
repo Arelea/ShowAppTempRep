@@ -1,0 +1,40 @@
+﻿@model AppNov14.Web.ViewModels.Goods.GoodsIndexViewModel
+
+<div class="row">
+    <div class="col-4">
+        <div class="header-text-child">Добавление и изменение</div>
+        <div class="child-content">
+            <div class="menu-item">
+                <a asp-controller="Goods" asp-action="MoveCompletedBatchList">Внести готовую продукцию на склад</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Goods" asp-action="SellBatchList">Отгрузить</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Goods" asp-action="AddCustomer">Добавить покупателя</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="header-text-child">Просмотр</div>
+        <div class="child-content">
+            <div class="menu-item">
+                <a asp-controller="Goods" asp-action="ViewBatchWarehouse">Склад партий</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Goods" asp-action="SellingsList">Список отгрузок</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="header-text-child">Приложение</div>
+        <div class="child-content">
+            <div class="menu-item">
+                <a asp-controller="Search" asp-action="Search">Поиск по действиям</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Search" asp-action="CustomerStats">Статистика по покупателям</a>
+            </div>
+        </div>
+    </div>
+</div>

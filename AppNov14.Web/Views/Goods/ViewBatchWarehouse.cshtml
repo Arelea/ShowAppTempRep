@@ -1,0 +1,172 @@
+﻿@using AppNov14.Helpers
+@model AppNov14.Web.ViewModels.Goods.ViewBatchWarehouseViewModel
+
+@{
+    Layout = "_TableLayout";
+    var items = this.Model.Items;
+}
+
+<div class="table-inputs">
+    <form asp-action="ViewBatchWarehouse">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="@this.Model.Form.Query" class="control-label">Поисковый запрос</label>
+                <input asp-for="@this.Model.Form.Query" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.Query" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="base-edit-form-divider"></div>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label asp-for="@this.Model.Form.TypeId" class="control-label">Тип</label>
+                <select asp-for="@this.Model.Form.TypeId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.BatchTypeList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.TypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="@this.Model.Form.LineId" class="control-label">Лииния</label>
+                <select asp-for="@this.Model.Form.LineId" class="form-control" asp-items="@(new SelectList(this.Model.BatchLineList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.LineId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="@this.Model.Form.StatusId" class="control-label">Статус</label>
+                <select asp-for="@this.Model.Form.StatusId" class="form-control" asp-items="@(new SelectList(this.Model.BatchStatusList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.StatusId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label asp-for="@this.Model.Form.BatchId" class="control-label">Номер партии</label>
+                <select asp-for="@this.Model.Form.BatchId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.BatchNameList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.BatchId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row input-btn-group">
+            <div class="form-group submit-btn">
+                <input type="submit" value="Найти" class="btn btn-primary-submit">
+            </div>
+            <div class="form-group child-btn">
+                <button class="btn btn-primary-warn btn-clear-filters">
+                    <span>Очистить фильтры</span>
+                </button>
+            </div>
+            <div class="form-group child-btn">
+                <a class="btn btn-secondary-child" asp-action="DownloadBatchWarehouseExcel" asp-controller="Goods">
+                    <span class="btn-link-text">Скачать Excel</span>
+                    <i class="icon-s20download1"></i>
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-wrapper">
+    @if (items == null || !items.Any())
+    {
+    <div class="empty-result">
+        <span>Записи не найдены</span>
+    </div>
+    }
+    else
+    {
+    <table align="center" class="table table-standart">
+        <thead>
+            <tr>
+                <th>
+                </th>
+                <th>
+                    #Id
+                </th>
+                <th>
+                    Номер партии
+                </th>
+                <th>
+                    Тип партии
+                </th>
+                <th>
+                    Линия
+                </th>
+                <th>
+                    Статус
+                </th>
+                <th>
+                    Текущий вес
+                </th>
+                <th>
+                    Текущее количество баулов
+                </th>
+                <th>
+                    Дата создания
+                </th>
+                <th>
+                    Автоматическая дата
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+                {
+            <tr>
+                <td class="table-item-link">
+                    <a asp-action="BatchFullInfo" asp-controller="Goods" asp-route-id="@item.Id" class="btn btn-link">
+                        <span class="btn-link-text">Посмотреть</span>
+                        <i class="btn-icon icon-s20view1"></i>
+                    </a>
+                </td>
+                <td>
+                    @item.Id
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Type
+                </td>
+                <td>
+                    @item.Line
+                </td>
+                <td>
+                    @(BatchStatuses.GetName(item.StatusId))
+                </td>
+                <td>
+                    @item.CurrentQuantity
+                </td>
+                <td>
+                    @item.CurrentPackage
+                </td>
+                <td>
+                    @(item.CreateDate.HasValue ? item.CreateDate.Value.ToString("dd.MM.yyyy") : string.Empty)
+                </td>
+                <td>
+                    @item.InsertDate
+                </td>
+            </tr>
+                }
+        </tbody>
+    </table>
+    }
+</div>
+
+<script>
+    $(function () {
+        $("#Form_TypeId, #Form_LineId, #Form_StatusId").change(function () {
+            $.ajax({
+                url: "/Goods/GetBatchByStatusAndTypeAndLine",
+                type: 'POST',
+                cache: false,
+                data: { statusId: $('#Form_StatusId').val(), typeId: $('#Form_TypeId').val(), lineId: $('#Form_LineId').val() },
+                dataType: 'json',
+                success: function (data) {
+                    $("#Form_BatchId").empty();
+                    $.each(data, function (index, value) {
+                        $("#Form_BatchId").append($('<option/>', { value: value.value, text: value.text }));
+                    });
+                }
+            });
+        });
+
+        $('.btn-clear-filters').click(function () {
+            $('form').find('select, input').val("@null");
+            $('form').submit();
+        });
+    });
+</script>

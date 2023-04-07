@@ -1,0 +1,155 @@
+﻿@model AppNov14.Web.ViewModels.Laboratory.ViewIndexLabViewModel
+
+@{
+    var items = this.Model.Items;
+}
+
+<form asp-action="ViewIndexLab" autocomplete="on">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Type" class="control-label">Тип материала</label>
+            <select asp-for="@this.Model.Form.Type" class="form-control" asp-items="@(new SelectList(this.Model.TypeOfMaterialList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.Type" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.SubType" class="control-label">Наименование типа материала</label>
+            <select asp-for="@this.Model.Form.SubType" class="form-control" asp-items="@(new SelectList(this.Model.NameOfTypeMaterialList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.SubType" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Provider" class="control-label">Поставщик</label>
+            <select asp-for="@this.Model.Form.Provider" class="form-control" asp-items="@(new SelectList(this.Model.ProviderList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.Provider" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Manufacturer" class="control-label">Производитель</label>
+            <select asp-for="@this.Model.Form.Manufacturer" class="form-control" asp-items="@(new SelectList(this.Model.ManufacturerList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.Manufacturer" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row input-btn-group">
+        <div class="form-group submit-btn">
+            <input type="submit" value="Найти" class="btn btn-primary-submit">
+        </div>
+    </div>
+</form>
+
+@if (items == null || !items.Any())
+{
+    <div class="empty-result">
+        <span>Данных о паспорте нет</span>
+    </div>
+}
+else
+{
+    <table align="center" class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Паспорт
+                </th>
+                <th>
+                    Количество
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr>
+                    <td>
+                        @item.Id
+                    </td>
+                    <td>
+                        @item.Index
+                    </td>
+                    <td>
+                        @item.Leftovers
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery-ui.js"></script>
+<link href="~/jquery-ui.css" rel="stylesheet" />
+<script>
+        $("#Form_Type").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_Type").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetSubTypeByTypeJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $('#Form_Type').val(), mode: 2 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_SubType").empty();
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_Provider").empty();
+                        $("#Form_SubType").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_SubType").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        });
+
+        $("#Form_SubType").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_SubType").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetProviderByTypeAndSubTypeJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $('#Form_Type').val(), subType: $('#Form_SubType').val(), mode: 2 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_Provider").empty();
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_Provider").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_Provider").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        })
+
+        $("#Form_Provider").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_Provider").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetManufacturerByTypeAndSubTypeAndProviderJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $("#Form_Type").val(), subType: $("#Form_SubType").val(), provider: $("#Form_Provider").val(), mode: 2 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_Manufacturer").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_Manufacturer").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        })
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

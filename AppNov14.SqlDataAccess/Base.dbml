@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="VestPlastDatabase" Class="BaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Server=DESKTOP-UMF5E2J\\SQLEXPRESS;Database=VestPlastDatabase;MultipleActiveResultSets=true;User ID=VPApplication;Password=AreleaApp#ConnPass" SettingsObjectName="AppNov14.SqlDataAccess.Properties.DataBaseSettings" SettingsPropertyName="DesktopConnectionString" Provider="System.Data.SqlClient" />
+	<Table Name="dbo.Warehouse" Member="Warehouse">
+		<Type Name="Warehouse">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Type" Type="System.String" DbType="NVarChar(150)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="SubType" Type="System.String" DbType="NVarChar(150)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Provider" Type="System.String" DbType="NVarChar(150)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Manufacturer" Type="System.String" DbType="NVarChar(150)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Leftovers" Type="System.Decimal" DbType="Decimal(15,3)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Mode" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Association Name="Warehouse_ManufacturingIndexes" Member="ManufacturingIndexes" ThisKey="Id" OtherKey="WarehouseId" Type="ManufacturingIndex" DeleteRule="CASCADE" />
+			<Association Name="Warehouse_LaboratoryIndexes" Member="LaboratoryIndexes" ThisKey="Id" OtherKey="WarehouseId" Type="LaboratoryIndex" DeleteRule="CASCADE" />
+			<Association Name="Warehouse_ManufacturingRecords" Member="ManufacturingRecords" ThisKey="Id" OtherKey="WarehouseId" Type="ManufacturingRecord" DeleteRule="CASCADE" />
+			<Association Name="Warehouse_LaboratoryRecords" Member="LaboratoryRecords" ThisKey="Id" OtherKey="WarehouseId" Type="LaboratoryRecord" DeleteRule="CASCADE" />
+		</Type>
+	</Table>
+	<Table Name="dbo.ManufacturingIndexes" Member="ManufacturingIndexes">
+		<Type Name="ManufacturingIndex">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="WarehouseId" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Index" Type="System.String" DbType="NVarChar(150)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Leftovers" Type="System.Decimal" DbType="Decimal(15,3)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="AutoDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="ExpirationDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="ManufacturingDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Association Name="Warehouse_ManufacturingIndexes" Member="Warehouse" ThisKey="WarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" DeleteRule="CASCADE" />
+			<Association Name="ManufacturingIndex_ManufacturingRecords" Member="ManufacturingRecords" ThisKey="Id" OtherKey="IndexId" Type="ManufacturingRecord" />
+		</Type>
+	</Table>
+	<Table Name="dbo.LaboratoryIndexes" Member="LaboratoryIndexes">
+		<Type Name="LaboratoryIndex">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="WarehouseId" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Indexation" Type="System.String" DbType="NVarChar(150)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Leftovers" Type="System.Decimal" DbType="Decimal(15,3)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="AutoDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Association Name="LaboratoryIndex_LaboratoryRecords" Member="LaboratoryRecords" ThisKey="Id" OtherKey="IndexId" Type="LaboratoryRecord" />
+			<Association Name="Warehouse_LaboratoryIndexes" Member="Warehouse" ThisKey="WarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" DeleteRule="CASCADE" />
+		</Type>
+	</Table>
+	<Table Name="dbo.ConsLabNumbers" Member="ConsLabNumbers">
+		<Type Name="ConsLabNumber">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Name" Type="System.String" DbType="NVarChar(150)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="AutoDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="false" UpdateCheck="WhenChanged" />
+		</Type>
+	</Table>
+	<Table Name="dbo.Batches" Member="Batches">
+		<Type Name="Batch">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Name" Type="System.String" DbType="NVarChar(150)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="InsertDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="TypeId" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="LineId" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="StatusId" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="InitialPackage" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="InitialQuantity" Type="System.Decimal" DbType="Decimal(15,3)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="CurrentPackage" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="CurrentQuantity" Type="System.Decimal" DbType="Decimal(15,3)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="LastUpdateDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="CreateDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="CompletionDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Association Name="BatchTypes_Batches" Member="BatchType" ThisKey="TypeId" OtherKey="Id" Type="BatchType" IsForeignKey="true" />
+			<Association Name="BatchLines_Batches" Member="BatchLine" ThisKey="LineId" OtherKey="Id" Type="BatchLine" IsForeignKey="true" />
+			<Association Name="BatchStatuses_Batches" Member="BatchStatus" ThisKey="StatusId" OtherKey="Id" Type="BatchStatus" IsForeignKey="true" />
+			<Association Name="Batches_ManufacturingRecords" Member="ManufacturingRecords" ThisKey="Id" OtherKey="BatchId" Type="ManufacturingRecord" />
+			<Association Name="Batches_BatchHistories" Member="BatchHistories" ThisKey="Id" OtherKey="BatchId" Type="BatchHistory" />
+			<Association Name="Batches_BatchHistories_Linked" Member="BatchHistoriesLinked" ThisKey="Id" OtherKey="LinkedBatchId" Type="BatchHistory" />
+			<Association Name="Batches_ChildBatches_Id" Member="ParentChildBatches" ThisKey="Id" OtherKey="BatchId" Type="ChildBatch"  />
+			<Association Name="Batches_ChildBatches_ChildId" Member="ChildrenChildBatches" ThisKey="Id" OtherKey="ChildBatchId" Type="ChildBatch" />
+		</Type>
+	</Table>
+	<Table Name="dbo.ReplenishmentDocuments" Member="ReplenishmentDocuments">
+		<Type Name="ReplenishmentDocument">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Name" Type="System.String" DbType="NVarChar(100)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="InsertDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Association Name="ReplenishmentDocuments_ManufacturingRecords" Member="ManufacturingRecords" ThisKey="Id" OtherKey="ReplenishmentDocumentId" Type="ManufacturingRecord" />
+		</Type>
+	</Table>
+	<Table Name="dbo.BatchTypes" Member="BatchTypes">
+		<Type Name="BatchType">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Name" Type="System.String" DbType="NVarChar(150)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="InsertDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Association Name="BatchTypes_Batches" Member="Batches" ThisKey="Id" OtherKey="TypeId" Type="Batch" />
+		</Type>
+	</Table>
+	<Table Name="dbo.BatchLines" Member="BatchLines">
+		<Type Name="BatchLine">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Name" Type="System.String" DbType="NVarChar(100)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="DisplayName" Type="System.String" DbType="NVarChar(100)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Association Name="BatchLines_Batches" Member="Batches" ThisKey="Id" OtherKey="LineId" Type="Batch" />
+		</Type>
+	</Table>
+	<Table Name="dbo.BatchStatuses" Member="BatchStatuses">
+		<Type Name="BatchStatus">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Name" Type="System.String" DbType="NVarChar(100)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="CssClass" Type="System.String" DbType="NVarChar(100)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Association Name="BatchStatuses_Batches" Member="Batches" ThisKey="Id" OtherKey="StatusId" Type="Batch" />
+		</Type>
+	</Table>
+	<Table Name="dbo.ManufacturingRecords" Member="ManufacturingRecords">
+		<Type Name="ManufacturingRecord">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Quantity" Type="System.Decimal" DbType="Decimal(15,3)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Leftovers" Type="System.Decimal" DbType="Decimal(15,3)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="DocDate" Type="System.DateTime" DbType="Date" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Employee" Type="System.String" DbType="NVarChar(50)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="IpAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="InsertDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Remarks" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="ActionType" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="WarehouseId" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="IndexId" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="ReplenishmentDocumentId" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="BatchId" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Association Name="Warehouse_ManufacturingRecords" Member="Warehouse" ThisKey="WarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" />
+			<Association Name="ManufacturingIndex_ManufacturingRecords" Member="ManufacturingIndex" ThisKey="IndexId" OtherKey="Id" Type="ManufacturingIndex" IsForeignKey="true" />
+			<Association Name="Batches_ManufacturingRecords" Member="Batch" ThisKey="BatchId" OtherKey="Id" Type="Batch" IsForeignKey="true" />
+			<Association Name="ReplenishmentDocuments_ManufacturingRecords" Member="ReplenishmentDocument" ThisKey="ReplenishmentDocumentId" OtherKey="Id" Type="ReplenishmentDocument" IsForeignKey="true" />
+		</Type>
+	</Table>
+	<Table Name="dbo.LaboratoryRecords" Member="LaboratoryRecords">
+		<Type Name="LaboratoryRecord">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Quantity" Type="System.Decimal" DbType="Decimal(15,3)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Leftovers" Type="System.Decimal" DbType="Decimal(15,3)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Document" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="DocumentNumber" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="DocDate" Type="System.DateTime" DbType="Date" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Employee" Type="System.String" DbType="NVarChar(50)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="IpAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="AutoDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Remarks" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="Action" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="WarehouseId" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="IndexId" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Association Name="Warehouse_LaboratoryRecords" Member="Warehouse" ThisKey="WarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" />
+			<Association Name="LaboratoryIndex_LaboratoryRecords" Member="LaboratoryIndex" ThisKey="IndexId" OtherKey="Id" Type="LaboratoryIndex" IsForeignKey="true" />
+		</Type>
+	</Table>
+	<Table Name="dbo.Comments" Member="Comments">
+		<Type Name="Comment">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Name" Type="System.String" DbType="NVarChar(150)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Text" Type="System.String" DbType="NVarChar(5000)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="InsertDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Type" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Employee" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="Answer" Type="System.String" DbType="NVarChar(5000)" CanBeNull="true" UpdateCheck="WhenChanged" />
+		</Type>
+	</Table>
+	<Table Name="dbo.BatchHistories" Member="BatchHistories">
+		<Type Name="BatchHistory">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="BatchId" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Text" Type="System.String" DbType="NVarChar(3000)" CanBeNull="false" UpdateCheck="WhenChanged" />		
+			<Column Name="ActionTypeId" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="OperationTypeId" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="InsertDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="CustomerId" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="Package" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="Quantity" Type="System.Decimal" DbType="Decimal(15,3)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="LeftPackage" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="LeftQuantity" Type="System.Decimal" DbType="Decimal(15,3)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="Remark" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="SoldDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="LinkedBatchId" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Column Name="ReturnDate" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="true" UpdateCheck="WhenChanged" />
+			<Association Name="Batches_BatchHistories" Member="Batch" ThisKey="BatchId" OtherKey="Id" Type="Batch" IsForeignKey="true" />
+			<Association Name="Batches_BatchHistories_Linked" Member="BatchLinked" ThisKey="LinkedBatchId" OtherKey="Id" Type="Batch" IsForeignKey="true" />
+			<Association Name="Customers_BatchHistories" Member="Customer" ThisKey="CustomerId" OtherKey="Id" Type="Customer" IsForeignKey="true" />
+			<Association Name="BatchHistoryActionTypes_BatchHistories" Member="BatchHistoryActionType" ThisKey="ActionTypeId" OtherKey="Id" Type="BatchHistoryActionType" IsForeignKey="true" />
+			<Association Name="BatchHistoryOperationTypes_BatchHistories" Member="BatchHistoryOperationType" ThisKey="OperationTypeId" OtherKey="Id" Type="BatchHistoryOperationType" IsForeignKey="true" />
+		</Type>
+	</Table>
+	<Table Name="dbo.Customers" Member="Customers">
+		<Type Name="Customer">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Association Name="Customers_BatchHistories" Member="BatchHistories" ThisKey="Id" OtherKey="CustomerId" Type="BatchHistory" />
+		</Type>
+	</Table>
+	<Table Name="dbo.BatchHistoryActionTypes" Member="BatchHistoryActionTypes">
+		<Type Name="BatchHistoryActionType">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Name" Type="System.String" DbType="NVarChar(100)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="CssClass" Type="System.String" DbType="NVarChar(100)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Association Name="BatchHistoryActionTypes_BatchHistories" Member="BatchHistories" ThisKey="Id" OtherKey="ActionTypeId" Type="BatchHistory" />
+		</Type>
+	</Table>
+	<Table Name="dbo.BatchHistoryOperationTypes" Member="BatchHistoryOperationTypes">
+		<Type Name="BatchHistoryOperationType">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Name" Type="System.String" DbType="NVarChar(100)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="CssClass" Type="System.String" DbType="NVarChar(100)" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Association Name="BatchHistoryOperationTypes_BatchHistories" Member="BatchHistories" ThisKey="Id" OtherKey="OperationTypeId" Type="BatchHistory" />
+		</Type>
+	</Table>
+  <Table Name="dbo.ChildBatches" Member="ChildBatches">
+		<Type Name="ChildBatch">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="BatchId" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="ChildBatchId" Type="System.Int32" DbType="Int" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Column Name="Date" Type="System.DateTime" DbType="Smalldatetime" CanBeNull="false" UpdateCheck="WhenChanged" />
+			<Association Name="Batches_ChildBatches_Id" Member="ParentBatch" ThisKey="BatchId" OtherKey="Id" Type="Batch" IsForeignKey="true" />
+			<Association Name="Batches_ChildBatches_ChildId" Member="ChildrenBatch" ThisKey="ChildBatchId" OtherKey="Id" Type="Batch" IsForeignKey="true" />
+		</Type>
+	</Table> 
+</Database>

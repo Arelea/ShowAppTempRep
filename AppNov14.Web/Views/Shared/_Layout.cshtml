@@ -1,0 +1,76 @@
+﻿@model AppNov14.Web.ViewModels.Base.BaseViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@this.Model.PageName</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/Main.css" />
+</head>
+<body class="@(this.Model.IsLabMode ? "laboratory-img" : string.Empty)">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery/dist/jquery-ui.js"></script>
+    <link href="~/jquery-ui.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link href="~/css/select2/select2.min.css" rel="stylesheet" />
+    <script src="~/lib/select2/select2.min.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm header">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">VestPlast Database</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item active">
+                            <a class="nav-link header-item" asp-area="" asp-controller="Manufacturing" asp-action="Index">Производство</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link header-item" asp-area="" asp-controller="Laboratory" asp-action="Index">Лаборатория</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link header-item" asp-area="" asp-controller="Goods" asp-action="Index">Отгрузки</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link header-item" asp-area="" asp-controller="Home" asp-action="Privacy">О базе</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="page-wrapper">
+        <div class="container">
+            <main role="main">
+                <div class="header-container">
+                    <div class="header-text row">
+                        @if (this.Model.IsBackButtonNeeded)
+                        {
+                            <a href="@this.Model.BackUrl" data-toggle="topltip" title="@this.Model.BackUrlName"><img src="~/images/back_arrow.png" class="rounded-circle" height="40" width="40" asp-append-version="true" /></a>
+                        }
+                        <span>@this.Model.PageName</span>
+                    </div>
+                </div>
+                <div class="content">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted bg-light">
+        <div class="container">
+            2022 &copy; Created by Arelea
+        </div>
+    </footer>
+</body>
+</html>

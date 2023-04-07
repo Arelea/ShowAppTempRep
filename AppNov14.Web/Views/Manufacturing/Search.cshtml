@@ -1,0 +1,371 @@
+﻿@using AppNov14.Helpers
+@model AppNov14.Web.ViewModels.ManufacturingTable.SearchViewModel
+
+@{
+    Layout = "_TableLayout";
+    var items = this.Model.Items;
+}
+
+<div class="table-inputs">
+    <form asp-action="Search">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label asp-for="@this.Model.Form.DateStart" class="control-label">От</label>
+                <input asp-for="@this.Model.Form.DateStart" type="date" min="2019-01-01" max="2050-12-31" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.DateStart" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@this.Model.Form.DateFinish" class="control-label">До</label>
+                <input asp-for="@this.Model.Form.DateFinish" type="date" min="2019-01-01" max="2050-12-31" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.DateFinish" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@this.Model.Form.Id" class="control-label">Id</label>
+                <input asp-for="@this.Model.Form.Id" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.Id" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4 show-mode-select-list">
+                <label asp-for="@this.Model.Form.ShowMode" class="control-label">Действие</label>
+                <select asp-for="@this.Model.Form.ShowMode" class="form-control" asp-items="@(new SelectList(this.Model.ShowModeList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.ShowMode" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label asp-for="@this.Model.Form.Type" class="control-label">Тип материала</label>
+                <select asp-for="@this.Model.Form.Type" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.TypesList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.Type" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@this.Model.Form.SubType" class="control-label">Наименование типа материала</label>
+                <select asp-for="@this.Model.Form.SubType" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.SubTypesList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.SubType" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@this.Model.Form.Provider" class="control-label">Поставщик</label>
+                <select asp-for="@this.Model.Form.Provider" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.ProviderList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.Provider" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@this.Model.Form.Manufacturer" class="control-label">Производитель</label>
+                <select asp-for="@this.Model.Form.Manufacturer" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.ManufacturerList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.Manufacturer" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="@this.Model.Form.Index" class="control-label">Паспорт</label>
+                <input asp-for="@this.Model.Form.Index" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.Index" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4 replenishment-document-select-list d-none">
+                <label asp-for="@this.Model.Form.BatchId" class="control-label">Номер документа</label>
+                <select asp-for="@this.Model.Form.BatchId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.ReplenishmentDocumentList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.BatchId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4 batch-select-list d-none">
+                <label asp-for="@this.Model.Form.BatchId" class="control-label">Номер партии</label>
+                <select asp-for="@this.Model.Form.BatchId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.BatchList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.BatchId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4 batch-type-select-list d-none">
+                <label asp-for="@this.Model.Form.BatchTypeId" class="control-label">Тип партии</label>
+                <select asp-for="@this.Model.Form.BatchTypeId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.BatchTypeList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.BatchTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4 batch-line-select-list d-none">
+                <label asp-for="@this.Model.Form.BatchLineId" class="control-label">Линия</label>
+                <select asp-for="@this.Model.Form.BatchLineId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.BatchLineList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.BatchLineId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row input-btn-group">
+            <div class="form-group submit-btn">
+                <input type="submit" value="Найти" class="btn btn-primary-submit">
+            </div>
+            <div class="form-group child-btn">
+                <button class="btn btn-primary-warn btn-clear-filters">
+                    <span>Очистить фильтры</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<div class="table-wrapper">
+    @if (items == null || !items.Any())
+    {
+        <div class="empty-result">
+            <span>Записи не найдены</span>
+        </div>
+    }
+    else
+    {
+        <table align="center" class="table table-standart">
+            <thead>
+                <tr>
+                    <th>
+                        #Id
+                    </th>
+                    <th>
+                        Действие
+                    </th>
+                    <th>
+                        Тип материала
+                    </th>
+                    <th>
+                        Наименование типа материала
+                    </th>
+                    <th>
+                        Поставщик
+                    </th>
+                    <th>
+                        Производитель
+                    </th>
+                    <th>
+                        Паспорт
+                    </th>
+                    <th>
+                        Количество
+                    </th>
+                    <th>
+                        Остатки
+                    </th>
+                    <th>
+                        Номер партии
+                    </th>
+                    <th>
+                        Тип партии
+                    </th>
+                    <th>
+                        Линия
+                    </th>
+                    <th>
+                        Номер документа
+                    </th>
+                    <th>
+                        Дата
+                    </th>
+                    <th>
+                        Имя сотрудника
+                    </th>
+                    <th>
+                        Авто дата
+                    </th>
+                    <th>
+                        Примечание
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in items)
+                {
+                    <tr class="@(item.ActionType == RawActionTypes.Replenishment ? "edit-list-tr-replenish" : "edit-list-tr-writeoff")">
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            @{
+                                RenderOperationType(item.ActionType);
+                            }
+                        </td>
+                        <td>
+                            @item.Type
+                        </td>
+                        <td>
+                            @item.SubType
+                        </td>
+                        <td>
+                            @item.Provider
+                        </td>
+                        <td>
+                            @item.Manufacturer
+                        </td>
+                        @if (item.ExpirationDate.HasValue)
+                        {
+                            <td data-toggle="tooltip" title="@($"Срок годности: {item.ExpirationDate.Value:dd.MM.yyyy}")" data-placement="bottom">
+                                @if (item.IndexId.HasValue)
+                                {
+                                    <a asp-action="IndexInfo" asp-route-indexId="@item.IndexId" target="_blank">@item.Index</a>
+                                }
+                                else
+                                {
+                                    @item.Index
+                                }
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @if (item.IndexId.HasValue)
+                                {
+                                    <a asp-action="IndexInfo" asp-route-indexId="@item.IndexId" target="_blank">@item.Index</a>
+                                }
+                                else
+                                {
+                                    @item.Index
+                                }
+                            </td>
+                        }
+                        <td>
+                            @item.Quantity
+                        </td>
+                        <td>
+                            @item.Leftovers
+                        </td>
+                        <td>
+                            @if (item.BatchId.HasValue)
+                            {
+                                <a asp-action="BatchInfo" asp-route-batchId="@item.BatchId" target="_blank">@item.BatchName</a>
+                            }
+                            else
+                            {
+                                @item.BatchName   
+                            }
+                        </td>
+                        <td>
+                            @item.BatchType
+                        </td>
+                        <td>
+                            @item.BatchLine
+                        </td>
+                        <td>
+                            @item.ReplenishmentDocument
+                        </td>
+                        <td>
+                            @item.DocDate.ToString("dd.MM.yyyy")
+                        </td>
+                        <td>
+                            @item.Employee
+                        </td>
+                        <td>
+                            @item.InsertDate
+                        </td>
+                        <td>
+                            @item.Remarks
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@{
+    void RenderOperationType(int operationType)
+    {
+        @if (operationType == RawActionTypes.Replenishment)
+        {
+            Write("Пополнение");
+        }
+        else if (operationType == RawActionTypes.WriteOff)
+        {
+            Write("Списание");
+        }
+        else
+        {
+            Write("Возвращение");
+        }
+    }
+}
+
+<script>
+    $(function () {
+        var isReady = false;
+        $("#Form_Type").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_Type").val("@null");
+                $("#Form_SubType").val("@null");
+
+                $.ajax({
+                    url: "/Search/GetFullSubTypeJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { mode: 1 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_SubType").empty();
+                        $.each(data, function (index, value) {
+                            $("#Form_SubType").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: "/Search/GetSubTypeByTypeJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $('#Form_Type').val(), mode: 1 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_SubType").empty();
+                        $.each(data, function (index, value) {
+                            $("#Form_SubType").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        });
+
+        $('.show-mode-select-list select').change(function () {
+            let $this = $(this);
+            if ($this.val() == "4") {
+                $('.replenishment-document-select-list').addClass("d-none");
+                $('.batch-select-list').addClass("d-none");
+                $('.batch-type-select-list').addClass("d-none");
+                $('.batch-line-select-list').addClass("d-none");
+
+                nullLisits(isReady);
+            }
+
+            if ($this.val() == "1") {
+                $('.batch-select-list').addClass("d-none");
+                $('.batch-type-select-list').addClass("d-none");
+                $('.batch-line-select-list').addClass("d-none");
+
+                $('.replenishment-document-select-list').removeClass("d-none");
+
+                nullLisits(isReady);
+            }
+
+            if ($this.val() == "2") {
+                $('.replenishment-document-select-list').addClass("d-none");
+
+                $('.batch-select-list').removeClass("d-none");
+                $('.batch-type-select-list').removeClass("d-none");
+                $('.batch-line-select-list').removeClass("d-none");
+
+                nullLisits(isReady);
+            }
+        });
+
+        $('.show-mode-select-list select').ready(function () {
+            isReady = true;
+            $('.show-mode-select-list select').change();
+        });
+
+        function nullLisits(isReady) {
+            if (!isReady) {
+                $('.replenishment-document-select-list select').val("@null");
+                $('.batch-select-list select').val("@null");
+                $('.batch-type-select-list select').val("@null");
+                $('.batch-line-select-list select').val("@null");
+            }
+
+            isReady = false;
+        };
+
+        $('.btn-clear-filters').click(function () {
+            $('form').find('select, input').val("@null");
+            $('form').submit();
+        });
+    });
+</script>

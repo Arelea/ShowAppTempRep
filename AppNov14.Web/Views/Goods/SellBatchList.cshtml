@@ -1,0 +1,86 @@
+﻿@model AppNov14.Web.ViewModels.Goods.SellBatchListViewModel
+
+@{
+    Layout = "_TableLayout";
+    var items = this.Model.Items;
+}
+
+<div class="table-inputs">
+    <form asp-action="SellBatchList">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="@this.Model.Form.BatchId" class="control-label">Номер партии</label>
+                <select asp-for="@this.Model.Form.BatchId" class="form-control dropdown-for-select2" asp-items="@(new SelectList(this.Model.BatchList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.BatchId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row input-btn-group">
+            <div class="form-group submit-btn">
+                <input type="submit" value="Найти" class="btn btn-primary-submit">
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-wrapper">
+    @if (items == null || !items.Any())
+    {
+        <div class="empty-result">
+            <span>Записи не найдены</span>
+        </div>
+    }
+    else
+    {
+        <table align="center" class="table table-standart">
+            <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        #Id
+                    </th>
+                    <th>
+                        Номер партии
+                    </th>
+                    <th>
+                        Тип партии
+                    </th>
+                    <th>
+                        Линия
+                    </th>
+                    <th>
+                        Автоматическая дата
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in items)
+                {
+                    <tr>
+                        <td class="table-item-link">
+                            <a asp-action="SellBatch" asp-controller="Goods" target="_blank" asp-route-id="@item.Id" class="btn btn-primary-warn">
+                                <span class="btn-link-text">Отгрузить партию</span>
+                                <i class="btn-icon icon-s20send_more_box"></i>
+                            </a>
+                        </td>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            <a asp-action="BatchFullInfo" asp-controller="Goods" asp-route-id="@item.Id" target="_blank">@item.Name</a>
+                        </td>
+                        <td>
+                            @item.Type
+                        </td>
+                        <td>
+                            @item.Line
+                        </td>
+                        <td>
+                            @item.InsertDate
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

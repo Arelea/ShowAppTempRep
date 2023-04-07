@@ -1,0 +1,34 @@
+﻿@*@model AppNov14.Web.ViewModels.Account.AccountRegisterViewModel
+
+    @{
+        Layout = null;
+    }
+
+
+    <h2>Регистрация нового пользователя</h2>
+    <form method="post" asp-controller="Account" asp-action="Register">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label asp-for="LoginApp"></label><br />
+            <input asp-for="LoginApp" />
+            <span asp-validation-for="LoginApp"></span>
+        </div>
+        <div>
+            <label asp-for="FName"></label><br />
+            <input asp-for="FName" />
+            <span asp-validation-for="FName"></span>
+        </div>
+        <div>
+            <label asp-for="LName"></label><br />
+            <input asp-for="LName" />
+            <span asp-validation-for="LName"></span>
+        </div>
+        <div>
+            <label asp-for="Password"></label><br />
+            <input asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div>
+            <input type="submit" value="Регистрация" />
+        </div>
+    </form>*@

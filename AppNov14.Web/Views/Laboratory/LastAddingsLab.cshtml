@@ -1,0 +1,135 @@
+﻿@using AppNov14.Helpers
+@model AppNov14.Web.ViewModels.Laboratory.LastAddingsLabViewModel
+
+@{
+    Layout = "_TableLayout";
+    var items = this.Model.Items;
+}
+
+<div class="table-wrapper">
+    <table align="center" class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    Действие
+                </th>
+                <th>
+                    #Id
+                </th>
+                <th>
+                    Тип материала
+                </th>
+                <th>
+                    Наименование типа материала
+                </th>
+                <th>
+                    Поставщик
+                </th>
+                <th>
+                    Производитель
+                </th>
+                <th>
+                    Количество
+                </th>
+                <th>
+                    Остатки
+                </th>
+                <th>
+                    Наименование партии
+                </th>
+                <th>
+                    Номер партии
+                </th>
+                <th>
+                    Паспорт
+                </th>
+                <th>
+                    Дата
+                </th>
+                <th>
+                    Авто дата
+                </th>
+                <th>
+                    Имя сотрудника
+                </th>
+                <th>
+                    IP Адресс
+                </th>
+                <th>
+                    Примечание
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr class="@(item.OperationType == RawActionTypes.Replenishment ? "edit-list-tr-replenish" : "edit-list-tr-writeoff")">
+                    <td>
+                        @{
+                            RenderOperationType(item.OperationType);
+                        }
+                    </td>
+                    <td>
+                        @item.Id
+                    </td>
+                    <td>
+                        @item.Type
+                    </td>
+                    <td>
+                        @item.SubType
+                    </td>
+                    <td>
+                        @item.Provider
+                    </td>
+                    <td>
+                        @item.Manufacturer
+                    </td>
+                    <td>
+                        @item.Quantity
+                    </td>
+                    <td>
+                        @item.Leftovers
+                    </td>
+                    <td>
+                        @item.Document
+                    </td>
+                    <td>
+                        @item.DocumentNumber
+                    </td>
+                    <td>
+                        @item.Indexation
+                    </td>
+                    <td>
+                        @item.DocDate.Date
+                    </td>
+                    <td>
+                        @item.AutoDate
+                    </td>
+                    <td>
+                        @item.Employee
+                    </td>
+                    <td>
+                        @item.IpAddress
+                    </td>
+                    <td>
+                        @item.Remarks
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@{
+    void RenderOperationType(int operationType)
+    {
+        @if (operationType == RawActionTypes.Replenishment)
+        {
+            Write("Пополнение");
+        }
+        else if (operationType == RawActionTypes.WriteOff)
+        {
+            Write("Списание");
+        }
+    }
+}

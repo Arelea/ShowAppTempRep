@@ -1,0 +1,32 @@
+﻿@model AppNov14.Web.ViewModels.ManufacturingTable.RestoreIndexDatesViewModel
+
+<div class="form-display-text">
+    <span>Восстановить даты для паспорта «@this.Model.Name»</span>
+</div>
+<form asp-action="RestoreIndexDates" autocomplete="on">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+        <input type="hidden" asp-for="@this.Model.Form.Id" />
+        @if (!this.Model.Form.ManufacturingDate.HasValue)
+        {
+            <div class="form-group col-md-2">
+                <label asp-for="@this.Model.Form.ManufacturingDate" class="control-label">Дата изготовления</label>
+                <input asp-for="@this.Model.Form.ManufacturingDate" type="date" min="2012-01-01" max="2050-12-31" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.ManufacturingDate" class="text-danger"></span>
+            </div>
+        }
+        @if (!this.Model.Form.ExpirationDate.HasValue)
+        {
+            <div class="form-group col-md-2">
+                <label asp-for="@this.Model.Form.ExpirationDate" class="control-label">Срок годности</label>
+                <input asp-for="@this.Model.Form.ExpirationDate" type="date" min="2012-01-01" max="2100-12-31" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.ExpirationDate" class="text-danger"></span>
+            </div>
+        }
+    </div>
+    <div class="form-row input-btn-group">
+        <div class="form-group submit-btn">
+            <input type="submit" value="Сохранить" class="btn btn-primary-submit">
+        </div>
+    </div>
+</form>

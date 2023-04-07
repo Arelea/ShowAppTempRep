@@ -1,0 +1,70 @@
+﻿@model AppNov14.Web.ViewModels.ManufacturingTable.ManufacturingRecordIndexViewModel
+
+<div class="row">
+    <div class="col-4">
+        <div class="header-text-child">Добавление и изменение</div>
+        <div class="child-content">
+            <div class="menu-item">
+                <a asp-controller="Manufacturing" asp-action="CreateIncomingOrder">Поступление нового сырья на склад</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Manufacturing" asp-action="CreateOutcomingOrder">Списания сырья на производство</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Warehouse" asp-action="CreateNewWarehouseField">Добавить новое наименование сырья</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Manufacturing" asp-action="AddBatchType">Добавить новое наименование партии</a>
+            </div>
+            @if (User.IsInRole("Moderator") || User.IsInRole("Admin"))
+            {
+                <div class="menu-item">
+                    <a asp-controller="Warehouse" asp-action="CreateNewWarehouseType">Добавить новый тип сырья</a>
+                </div>
+                <div class="menu-item">
+                    <a asp-controller="Manufacturing" asp-action="EditList">Редактирование и удаление</a>
+                </div>
+                <div class="menu-item">
+                    <a asp-controller="Manufacturing" asp-action="EditBatchList">Редактирование партии</a>
+                </div>
+            }
+            <div class="menu-item">
+                <a asp-controller="Manufacturing" asp-action="CreateCorrectionOutcomingOrder">Списания сырья на производство (корректировка)</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="header-text-child">Просмотр</div>
+        <div class="child-content">
+            <div class="menu-item">
+                <a asp-controller="Manufacturing" asp-action="MyLastAddings">Мои последние записи</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Manufacturing" asp-action="EveryoneLastAddings">Общие последние записи</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Warehouse" asp-action="WarehouseViewAll">Склад сырья</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Warehouse" asp-action="WarehouseFullInfo">Подробная информация по складу сырья</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="header-text-child">Приложение</div>
+        <div class="child-content">
+            <div class="menu-item">
+                <a asp-controller="Manufacturing" asp-action="Search">Поиск</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Manufacturing" asp-action="ImportExcelFile">Excel-выписка</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Manufacturing" asp-action="BatchInfo">Состав партии</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Manufacturing" asp-action="IndexInformationList">Список паспортов</a>
+            </div>
+        </div>
+    </div>
+</div>

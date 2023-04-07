@@ -1,0 +1,200 @@
+﻿@model AppNov14.Web.ViewModels.Laboratory.EditLabViewModel
+
+@if (this.Model.Form.OperationType == 1)
+{
+    <div class="header-text-child">Редактирование: Добавление сырья в лабораторию</div>
+}
+else
+{
+    <div class="header-text-child">Редактирование: Списание сырья из лаборатории</div>
+}
+
+<form asp-action="EditLab" autocomplete="on">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+        <input type="hidden" asp-for="@this.Model.Form.Id" />
+        <input type="hidden" asp-for="@this.Model.Form.OperationType" />
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Quantity" class="control-label">Количество</label>
+            <input asp-for="@this.Model.Form.Quantity" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.Quantity" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Type" class="control-label">Тип материала</label>
+            <select asp-for="@this.Model.Form.Type" class="form-control" asp-items="@(new SelectList(this.Model.TypeOfMaterialList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.Type" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.SubType" class="control-label">Наименование типа материала</label>
+            <select asp-for="@this.Model.Form.SubType" class="form-control" asp-items="@(new SelectList(this.Model.NameOfTypeMaterialList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.SubType" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Provider" class="control-label">Поставщик</label>
+            <select asp-for="@this.Model.Form.Provider" class="form-control" asp-items="@(new SelectList(this.Model.ProviderList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.Provider" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Manufacturer" class="control-label">Производитель</label>
+            <select asp-for="@this.Model.Form.Manufacturer" class="form-control" asp-items="@(new SelectList(this.Model.ManufacturerList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.Manufacturer" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        @if (this.Model.Form.OperationType == 2)
+        {
+            <div class="form-group col-md-6">
+                <label asp-for="@this.Model.Form.Document" class="control-label">Наименование партии</label>
+                <select asp-for="@this.Model.Form.Document" class="form-control" asp-items="@(new SelectList(this.Model.ConsignmentTypesList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.Document" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="@this.Model.Form.DocumentNumber" class="control-label">Номер партии</label>
+                <input asp-for="@this.Model.Form.DocumentNumber" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.DocumentNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="@this.Model.Form.Indexation" class="control-label">Паспорт</label>
+                <select asp-for="@this.Model.Form.Indexation" class="form-control"  asp-items="@(new SelectList(this.Model.IndexList, "Value", "Text"))"></select>
+                <span asp-validation-for="@this.Model.Form.Indexation" class="text-danger"></span>
+            </div>
+        }
+        else
+        {
+            <input value="Null" type="hidden" asp-for="@this.Model.Form.DocumentNumber" />
+            <input value="Null" type="hidden" asp-for="@this.Model.Form.Document" />
+            <div class="form-group col-md-6">
+                <label asp-for="@this.Model.Form.Indexation" class="control-label">Паспорт</label>
+                <input asp-for="@this.Model.Form.Indexation" class="form-control" />
+                <span asp-validation-for="@this.Model.Form.Indexation" class="text-danger"></span>
+            </div>
+        }
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label asp-for="@this.Model.Form.DocDate" class="control-label">Дата</label>
+            <input asp-for="@this.Model.Form.DocDate" type="date" min="2010-01-01" max="2050-12-31" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.DocDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Remarks" class="control-label">Примечание</label>
+            <textarea asp-for="@this.Model.Form.Remarks" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="@this.Model.Form.Remarks" class="text-danger"></span>
+
+        </div>
+    </div>
+    <div class="form-row input-btn-group">
+        <div class="form-group submit-btn">
+            <input type="submit" value="Сохранить" class="btn btn-primary-submit" onclick="return confirm('Вы уверенны, что хотите редактировать запись?')">
+        </div>
+    </div>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(function () {
+        $("#Form_Type").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_Type").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetSubTypeByTypeJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $('#Form_Type').val(), mode: 2 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_SubType").empty();
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_Provider").empty();
+                        $("#Form_Indexation").empty();
+                        $("#Form_SubType").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_SubType").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        });
+
+        $("#Form_SubType").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_SubType").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetProviderByTypeAndSubTypeJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $('#Form_Type').val(), subType: $('#Form_SubType').val(), mode: 2 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_Provider").empty();
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_Indexation").empty();
+                        $("#Form_Provider").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_Provider").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        })
+
+        $("#Form_Provider").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_Provider").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetManufacturerByTypeAndSubTypeAndProviderJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $("#Form_Type").val(), subType: $("#Form_SubType").val(), provider: $("#Form_Provider").val(), mode: 2 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_Indexation").empty();
+                        $("#Form_Manufacturer").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_Manufacturer").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        })
+        if(@this.Model.Form.OperationType == 2)
+        {
+            $("#Form_Manufacturer").change(function () {
+                if ($(this).val() == "@null") {
+                    $("#Form_Manufacturer").val("@null");
+                }
+                else {
+                    $.ajax({
+                        url: "/Laboratory/GetIndexationJson",
+                        type: 'POST',
+                        cache: false,
+                        data: { type: $("#Form_Type").val(), subType: $("#Form_SubType").val(), provider: $("#Form_Provider").val(), manufacturer: $("#Form_Manufacturer").val() },
+                        dataType: 'json',
+                        success: function (data) {
+                            $("#Form_Indexation").empty();
+                            $("#Form_Indexation").append($('<option/>', { value: '@null', text: '--Select--' }));
+                            $.each(data, function (index, value) {
+                                $("#Form_Indexation").append($('<option/>', { value: value.value, text: value.text }));
+                            });
+                        }
+                    });
+                }
+            })
+        }
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

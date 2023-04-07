@@ -1,0 +1,49 @@
+﻿@model AppNov14.Web.ViewModels.ManufacturingTable.AddBatchTypeViewModel
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddBatchType" autocomplete="on">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@this.Model.Name" class="control-label">Тип партии</label>
+                <input asp-for="@this.Model.Name" class="form-control" />
+                <span asp-validation-for="@this.Model.Name" class="text-danger"></span>
+            </div>
+            <div class="form-row input-btn-group">
+                <div class="form-group submit-btn">
+                    <input type="submit" value="Сохранить" class="btn btn-primary-submit" onclick="return confirm('Вы уверенны, что хотите добавить тип партии?')">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery-ui.js"></script>
+<link href="~/jquery-ui.css" rel="stylesheet" />
+<script type="text/javascript">
+    $(function () {
+        $("#Name").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Manufacturing/GetBatchTypesJson',
+                    type: 'POST',
+                    cache: false,
+                    data: { prefix: $("#Name").val() },
+                    dataType: 'json',
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                value: item.value
+                            }
+                        }))
+                    }
+                });
+            },
+        });
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

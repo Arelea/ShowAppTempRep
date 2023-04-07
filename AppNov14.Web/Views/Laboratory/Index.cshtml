@@ -1,0 +1,55 @@
+﻿@model AppNov14.Web.ViewModels.Laboratory.LaboratoryIndexViewModel
+
+<div class="row">
+    <div class="col-4">
+        <div class="header-text-child">Добавление и изменение</div>
+        <div class="child-content">
+            <div class="menu-item">
+                <a asp-controller="Laboratory" asp-action="CreateIncomingOrderLab">Поступление нового сырья в лабораторию</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Laboratory" asp-action="CreateOutcomingOrderLab">Списания сырья из лаборатории</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Warehouse" asp-action="LabCreateNewWarehouseField">Добавить новое наименование сырья</a>
+            </div>
+            @if (User.IsInRole("Moderator") || User.IsInRole("Admin"))
+            {
+                <div class="menu-item">
+                    <a asp-controller="Warehouse" asp-action="LabCreateNewWarehouseType">Добавить новый тип сырья в лабораторию</a>
+                </div>
+                <div class="menu-item">
+                    <a asp-controller="Laboratory" asp-action="EditListLab">Редактирование и удаление</a>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="header-text-child">Просмотр</div>
+        <div class="child-content">
+            <div class="menu-item">
+                <a asp-controller="Laboratory" asp-action="LastAddingsLab">Последние записи</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Warehouse" asp-action="WarehouseViewLab">Склад лабораторного сырья</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="header-text-child">Приложение</div>
+        <div class="child-content">
+            <div class="menu-item">
+                <a asp-controller="Search" asp-action="SearchLaboratory">Поиск</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Laboratory" asp-action="ImportExcelFileLab">Excel-выписка</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Laboratory" asp-action="ConsignmentNumberInfoLab">Состав партии</a>
+            </div>
+            <div class="menu-item">
+                <a asp-controller="Laboratory" asp-action="ViewIndexLab">Паспорты</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,98 @@
+﻿.content-table {
+  margin-top: 0; }
+  .content-table .table-wrapper {
+    background-color: #ffffff;
+    overflow-x: auto; }
+    .content-table .table-wrapper .table {
+      margin-bottom: 0; }
+  .content-table .table-inputs {
+    background-color: #ffffff;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 10px;
+    margin-bottom: 15px; }
+    .content-table .table-inputs .form-row {
+      margin-right: 0;
+      margin-left: 0; }
+
+.table-container {
+  padding: 15px 15px 15px 15px; }
+
+.header-container {
+  height: 64px;
+  margin-left: 1px;
+  background-color: #ffffff; }
+
+.edit-list-tr-replenish {
+  background-color: #F1FFF1; }
+
+.edit-list-tr-writeoff {
+  background-color: #FFF1F1; }
+
+.warehouse__search {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  background-color: #F6F6F6;
+  border-radius: 10px; }
+  .warehouse__search .control-label {
+    padding-top: 15px;
+    padding-left: 15px; }
+  .warehouse__search .form-control {
+    margin-left: 15px;
+    max-width: 33%; }
+  .warehouse__search .input-btn-group {
+    padding-left: 15px; }
+
+.warehouse__cell-container {
+  padding-bottom: 10px;
+  margin-bottom: 40px; }
+  .warehouse__cell-container .warehouse__cell-text {
+    height: 60px;
+    vertical-align: middle;
+    background-color: #cdf0ff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center; }
+    .warehouse__cell-container .warehouse__cell-text span {
+      padding-left: 20px;
+      font-size: 28px;
+      font-weight: 600;
+      color: #4C4C4C; }
+  .warehouse__cell-container .warehouse__cell-table {
+    margin-top: 20px; }
+    .warehouse__cell-container .warehouse__cell-table table thead {
+      background-color: #FCFCFC; }
+      .warehouse__cell-container .warehouse__cell-table table thead th {
+        font-size: 17px;
+        font-weight: 500;
+        color: #4C4C4C; }
+    .warehouse__cell-container .warehouse__cell-table table tbody tr {
+      border-bottom: 1px solid #dee2e6; }
+    .warehouse__cell-container .warehouse__cell-table table tbody td {
+      border-top: unset !important;
+      font-size: 16px;
+      font-weight: 400;
+      color: #4C4C4C; }
+    .warehouse__cell-container .warehouse__cell-table table tbody td:not(:last-child) {
+      border-right: 1px solid #dee2e6; }
+
+.table-standart {
+  margin-top: 5px; }
+  .table-standart thead {
+    background-color: #FCFCFC; }
+    .table-standart thead th {
+      font-size: 17px;
+      font-weight: 500;
+      color: #4C4C4C; }
+  .table-standart tbody tr {
+    border-bottom: 1px solid #dee2e6; }
+    .table-standart tbody tr td {
+      border-top: unset !important;
+      font-size: 16px;
+      font-weight: 400;
+      color: #4C4C4C; }
+    .table-standart tbody tr td:not(:last-child) {
+      border-right: 1px solid #dee2e6; }
+
+.table-item-link {
+  width: 15%; }

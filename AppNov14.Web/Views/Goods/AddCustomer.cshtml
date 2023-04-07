@@ -1,0 +1,25 @@
+﻿@model AppNov14.Web.ViewModels.Goods.AddCustomerViewModel
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddCustomer" autocomplete="on">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@this.Model.Name" class="control-label">Имя покупателя</label>
+                <input asp-for="@this.Model.Name" class="form-control" />
+                <span asp-validation-for="@this.Model.Name" class="text-danger"></span>
+            </div>
+            <div class="form-row input-btn-group">
+                <div class="form-group submit-btn">
+                    <input type="submit" value="Сохранить" class="btn btn-primary-submit" onclick="return confirm('Вы уверенны, что хотите добавить покупателя?')">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

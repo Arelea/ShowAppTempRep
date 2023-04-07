@@ -1,0 +1,158 @@
+﻿@model AppNov14.Web.ViewModels.ManufacturingTable.CreateIncomingOrderViewModel
+
+<form asp-action="CreateIncomingOrder" autocomplete="on">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Quantity" class="control-label">Количество</label>
+            <input asp-for="@this.Model.Form.Quantity" class="form-control" autocomplete="off" />
+            <span asp-validation-for="@this.Model.Form.Quantity" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Type" class="control-label">Тип материала</label>
+            <select asp-for="@this.Model.Form.Type" class="form-control" asp-items="@(new SelectList(this.Model.TypeList, "Value", "Text"))"></select>
+            <span asp-validation-for="@this.Model.Form.Type" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.SubType" class="control-label">Наименование типа материала</label>
+            <select asp-for="@this.Model.Form.SubType" class="form-control"></select>
+            <span asp-validation-for="@this.Model.Form.SubType" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Provider" class="control-label">Поставщик</label>
+            <select asp-for="@this.Model.Form.Provider" class="form-control"></select>
+            <span asp-validation-for="@this.Model.Form.Provider" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Manufacturer" class="control-label">Производитель</label>
+            <select asp-for="@this.Model.Form.Manufacturer" class="form-control"></select>
+            <span asp-validation-for="@this.Model.Form.Manufacturer" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.ReplenishmentDocument" class="control-label">Номер документа</label>
+            <input asp-for="@this.Model.Form.ReplenishmentDocument" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.ReplenishmentDocument" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Index" class="control-label">Паспорт</label>
+            <input asp-for="@this.Model.Form.Index" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.Index" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label asp-for="@this.Model.Form.DocDate" class="control-label">Дата</label>
+            <input asp-for="@this.Model.Form.DocDate" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" min="2012-01-01" max="2050-12-31" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.DocDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label asp-for="@this.Model.Form.ManufacturingDate" class="control-label">Дата изготовления</label>
+            <input asp-for="@this.Model.Form.ManufacturingDate" type="date" min="2012-01-01" max="2050-12-31" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.ManufacturingDate" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="@this.Model.Form.ExpirationDate" class="control-label">Срок годности</label>
+            <input asp-for="@this.Model.Form.ExpirationDate" type="date" min="2012-01-01" max="2100-12-31" class="form-control" />
+            <span asp-validation-for="@this.Model.Form.ExpirationDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="@this.Model.Form.Remarks" class="control-label">Примечание</label>
+            <textarea asp-for="@this.Model.Form.Remarks" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="@this.Model.Form.Remarks" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row input-btn-group">
+        <div class="form-group submit-btn">
+            <input type="submit" value="Сохранить" class="btn btn-primary-submit" onclick="return confirm('Вы уверенны, что хотите добавить сырье на склад?')">
+        </div>
+        <div class="form-group child-btn">
+            <a class="btn btn-secondary-child" asp-controller="Warehouse" asp-action="CreateNewWarehouseField">Добавить новое наименование сырья</a>
+        </div>
+    </div>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(function () {
+        $("#Form_Type").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_Type").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetSubTypeByTypeJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $('#Form_Type').val(), mode: 1 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_SubType").empty();
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_Provider").empty();
+                        $("#Form_SubType").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_SubType").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        });
+
+        $("#Form_SubType").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_SubType").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetProviderByTypeAndSubTypeJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $('#Form_Type').val(), subType: $('#Form_SubType').val(), mode: 1 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_Provider").empty();
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_Provider").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_Provider").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        })
+
+        $("#Form_Provider").change(function () {
+            if ($(this).val() == "@null") {
+                $("#Form_Provider").val("@null");
+            }
+            else {
+                $.ajax({
+                    url: "/Manufacturing/GetManufacturerByTypeAndSubTypeAndProviderJson",
+                    type: 'POST',
+                    cache: false,
+                    data: { type: $("#Form_Type").val(), subType: $("#Form_SubType").val(), provider: $("#Form_Provider").val(), mode: 1 },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#Form_Manufacturer").empty();
+                        $("#Form_Manufacturer").append($('<option/>', { value: '@null', text: '--Select--' }));
+                        $.each(data, function (index, value) {
+                            $("#Form_Manufacturer").append($('<option/>', { value: value.value, text: value.value }));
+                        });
+                    }
+                });
+            }
+        })
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

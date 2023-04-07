@@ -1,0 +1,25 @@
+﻿@model AppNov14.Web.ViewModels.Users.UserIndexViewModel
+
+<h2>Список пользователей</h2>
+<br />
+<table class="table">
+    <tr><th>Логин</th><th>Имя</th><th>Фамилия</th></tr>
+    @foreach (var user in this.Model.Users)
+    {
+        <tr>
+            <td>@user.UserName</td>
+            <td>@user.FirstName</td>
+            <td>@user.FamilyName</td>
+            <td>
+                <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
+                    <a class="btn btn-sm btn-primary" asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Вы уверенны, что хотите удалить пользователя?')">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+<a class="btn btn-outline-secondary" asp-action="Create">Добавить пользователя</a>

@@ -1,0 +1,32 @@
+﻿@model AppNov14.Web.ViewModels.Home.IndexViewModel
+
+@*<div class="alert alert-info">
+    <h5>Новость</h5>
+    <hr />
+    <p>Отгрузочная база доделана. Некоторые функции просмотра не работают и будут доступны в ближайшие дни.</p>
+</div>*@
+
+<div class="menu-item main-menu-item">
+    <a asp-controller="Manufacturing" asp-action="Index">Производство</a>
+</div>
+<div class="menu-item main-menu-item">
+    <a asp-controller="Laboratory" asp-action="Index">Лаборатория</a>
+</div>
+<div class="menu-item main-menu-item">
+    <a asp-controller="Goods" asp-action="Index">Отгрузки</a>
+</div>
+<div class="menu-item main-menu-item">
+    <a asp-controller="Comment" asp-action="List">Комментарии</a>
+</div>
+@if (User.IsInRole("Admin"))
+{
+    <div class="menu-item main-menu-item">
+        <a asp-controller="Users" asp-action="Index">Пользователи</a>
+    </div>
+    <div class="menu-item main-menu-item">
+        <a asp-controller="Roles" asp-action="Index">Роли</a>
+    </div>
+}
+<form class="logout-form" method="post" asp-controller="Account" asp-action="Logout">
+    <input type="submit" value="Выход" />
+</form>

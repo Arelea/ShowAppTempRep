@@ -1,0 +1,126 @@
+﻿@model AppNov14.Web.ViewModels.ManufacturingTable.IndexInfoViewModel
+
+@if (this.Model.Item != null)
+{
+    <div class="form-display-text">
+        <span>Паспорт «@this.Model.Item.Index»</span>
+    </div>
+    <div class="form-display-container">
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>#Id</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Item.Id</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Название</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Item.Index</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Тип материала</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Item.Type</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Наименование типа материала</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Item.SubType</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Поставщик</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Item.Provider</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Производитель</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Item.Manufacturer</span>
+            </div>
+        </div>
+        <div class="child-form-display__item row">
+            <div class="form-display__item-name col-3 col-md-3">
+                <span>Остатки</span>
+            </div>
+            <div class="form-display__item-value col-6 col-md-6">
+                <span>@this.Model.Item.Leftovers</span>
+            </div>
+        </div>
+        @if (this.Model.Item.ManufacturingDate.HasValue)
+        {
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Дата изготовления</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@this.Model.Item.ManufacturingDate.Value.ToString("dd.MM.yyyy")</span>
+                </div>
+            </div>
+        }
+        @if (this.Model.Item.ExpirationDate.HasValue)
+        {
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Срок годности</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@this.Model.Item.ExpirationDate.Value.ToString("dd.MM.yyyy")</span>
+                </div>
+            </div>
+        }
+        @if (this.Model.Item.AutoDate.HasValue)
+        {
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Авто дата</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    <span>@this.Model.Item.AutoDate</span>
+                </div>
+            </div>
+        }
+        @if (this.Model.LinkedBatches != null && this.Model.LinkedBatches.Any())
+        {
+            <div class="base-divider"></div>
+            <div class="child-form-display__item row">
+                <div class="form-display__item-name col-3 col-md-3">
+                    <span>Связанные партии</span>
+                </div>
+                <div class="form-display__item-value col-6 col-md-6">
+                    @foreach (var link in this.Model.LinkedBatches)
+                    {
+                        <div><a asp-action="BatchInfo" asp-route-batchId="@link.Key" target="_blank">@link.Value</a> </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    @if (!this.Model.Item.ExpirationDate.HasValue || !this.Model.Item.ManufacturingDate.HasValue)
+    {
+        <div class="display-input-group">
+            <a class="btn btn-secondary-child" asp-action="RestoreIndexDates" asp-controller="Manufacturing" asp-route-indexId="@this.Model.Item.Id" asp-route-name="@this.Model.Item.Index" asp-route-expirationDate="@this.Model.Item.ExpirationDate" asp-route-manufacturingDate="@this.Model.Item.ManufacturingDate">Восстановить даты срока годности и изготовления</a>
+        </div>
+    }
+}
+else
+{
+    <div class="empty-result">
+        <span>Записи не найдены</span>
+    </div>
+}
