@@ -1,2 +1,0 @@
-# ShowAppTempRep
-For show only
